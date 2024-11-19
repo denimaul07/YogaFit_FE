@@ -46,7 +46,12 @@ import Kat_pembayaran from "../pages/Kat_pembayaran.vue";
 import Team from "../pages/Team.vue";
 import SwitchSales from "../pages/SwitchSales.vue";
 import Target from "../pages/Target.vue";
-
+import Banner from "../pages/Banner.vue";
+import Course from "../pages/Course.vue";
+import Workshop from "../pages/Workshop.vue";
+import Event from "../pages/Event.vue";
+import Faq from "../pages/Faq.vue";
+import Instructor from "../pages/Instructor.vue";
 const routes = [
   {
     path: "/",
@@ -395,6 +400,60 @@ const routes = [
         },
       },
 
+      {
+        path: "/banner",
+        name: "Banner",
+        component: Banner, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/event",
+        name: "Event",
+        component: Event, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/faq",
+        name: "Faq",
+        component: Faq, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/instructor",
+        name: "Instructor",
+        component: Instructor, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/course",
+        name: "Course",
+        component: Course, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/workshop",
+        name: "Workshop",
+        component: Workshop, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+      
       {
         path: "/kat_pembayaran",
         name: "kat_pembayaran",

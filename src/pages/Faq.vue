@@ -43,12 +43,12 @@
         <div class="col-span-12 2xl:col-span-4">
             <div class="flex flex-wrap items-center col-span-12  intro-y sm:flex-nowrap">
                 <RouterLink :to="{ name: 'Dashboard' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="Home" class="w-4 h-4 mr-3" /> Home</RouterLink>
-                <RouterLink :to="{ name: 'class' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="ChevronRight" class="w-4 h-4 mr-3" /> Master Class</RouterLink>
+                <RouterLink :to="{ name: 'Faq' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="ChevronRight" class="w-4 h-4 mr-3" /> Master FAQ</RouterLink>
             </div>
         
         </div>
         <div class="col-span-12 2xl:col-span-4">
-            <h2 class="mt-4 text-lg font-medium intro-y items-center text-center">List Data Class</h2>
+            <h2 class="mt-4 text-lg font-medium intro-y items-center text-center">List Data FAQ</h2>
         </div>
         <div class="col-span-12 2xl:col-span-4">
         
@@ -68,25 +68,14 @@
         <div class="col-span-12 2xl:col-span-12 pt-12"> 
         
             <div class="grid grid-cols-12 gap-6">
-                <Button variant="primary" class="mr-2 shadow-md" @click="add">
-                    <span class="flex items-center justify-center w-60 h-5">
-                        <Lucide icon="Plus" class="w-4 h-4" /> Add New
-                    </span>
-                </Button>
+
                 <div class="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">       
                     <div class="items-center sm:flex sm:mr-4">
-                    
-
-                        <label class="flex-none w-12 mr-2 xl:w-auto xl:flex-initial">
-                            Filter
-                        </label>
-                        <FormSelect v-model="level" class="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto">
-                            <option value="">Semua Data</option>
-                            <option value="Advance">Advance</option>
-                            <option value="All Level">All Level</option>
-                            <option value="Intermediate">Intermediate</option>
-                            <option value="Beginner">Beginner</option>
-                        </FormSelect>
+                        <Button variant="primary" class="mr-2 shadow-md" @click="add">
+                            <span class="flex items-center justify-center w-40 h-5">
+                                <Lucide icon="Plus" class="w-4 h-4" /> Add New Faq
+                            </span>
+                        </Button>
 
                     </div>
 
@@ -110,7 +99,6 @@
                         
                     </div>
                 </div>
-
             
                 <div class="col-span-12 sm:col-span-12 xl:col-span-12  intro-y">
                     <div class="col-span-12 2xl:col-span-3">
@@ -122,29 +110,15 @@
                                             No
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Name Class
+                                            Title
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Level
-                                        </Table.Th>
-                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Class
-                                        </Table.Th>
-                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Capacity
-                                        </Table.Th>
-                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Duration
-                                        </Table.Th>
-                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Virtual Class
-                                        </Table.Th>
-                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Foto Class
+                                            Faq
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                             Status
                                         </Table.Th>
+                                    
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                             Action
                                         </Table.Th>
@@ -173,48 +147,30 @@
                                             </div>
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.class_name }}
+                                            {{ data.title }}
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.class_level }}
+                                            {{ data.faq }}
                                         </Table.Td>
-                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.class_kat }}
-                                        </Table.Td>
-                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.capacity }}
-                                        </Table.Td>
-                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.duration }}
-                                        </Table.Td>
-                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.virtual_class }}
-                                        </Table.Td>
-                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            <a-image
-                                                :width="100"
-                                                :src="'https://login.yogafitidonline.com/api/storage/kelas/'+data.file"
-                                                 fallback="data:image/png;base64,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"
-                                            />
-                                        </Table.Td>
+                                
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
                                             <div
                                                 :class="[
                                                 'flex items-center justify-center',
-                                                    { 'text-success': data.status_class==0 },
-                                                    { 'text-danger': data.status_class==1 }
+                                                    { 'text-success': data.status_faq==0 },
+                                                    { 'text-danger': data.status_faq==1 }
                                                 ]"
                                             >
                                                 <!-- <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" /> -->
-                                                <div v-if="data.status_class==0">Active</div>
-                                                <div v-else-if="data.status_class==1">Non Active</div>
+                                                <div v-if="data.status_faq==0">Active</div>
+                                                <div v-else-if="data.status_faq==1">Non Active</div>
                                             
                                             </div>
                                         </Table.Td>
                             
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                                             <div class="flex items-center justify-center">
-                                                <a class="flex items-center text-success" href="#" @click="edit(data.id)">
+                                                <a class="flex items-center text-success" href="#" @click="edit(data.odata)">
                                                     <Lucide icon="Pencil" class="w-4 h-4 mr-1" /> 
                                                 </a>
                                             </div>
@@ -293,13 +249,11 @@
     </Dialog>
 
     <Dialog  size="xl" :open="AddModal"  @close="setAddModal(false)" >
-        <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4">
-                <DialogPanel class="w-full rounded bg-white">
+    
+                <Dialog.Panel>
                     <Dialog.Title class="flex items-center px-5 py-3 border-b border-slate-200/60 dark:border-darkmode-400">
                         <h2 class="mr-auto text-base font-medium">
-                            {{ action }} Class
+                            {{ action }} FAQ
                         </h2>
 
                         <Button type="button" variant="danger" class="mb-2 mr-1" @click="setAddModal(false)">
@@ -308,94 +262,29 @@
                     </Dialog.Title>
                     
                     <Dialog.Description  class="grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Class Name</FormLabel>
-                                <FormInput type="text" class="col-span-8" v-model="state.data.nama" placeholder="Insert Class Name"/>
-                            </FormInline>
+                
+                        <div class="col-span-12 sm:col-span-12 xl:col-span-12 intro-y">
+                        <FormInline class="mt-2">
+                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Title</FormLabel>
+                            <FormInput type="text" class="col-span-8" v-model="state.data.title" placeholder="Insert Title"/> 
+                        </FormInline>
+                    
+            
+                        <FormInline class="mt-2">
+                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> FAQ</FormLabel>
+                            <ClassicEditor v-model="state.data.faq"  />
+                        </FormInline>
 
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Class Level</FormLabel>
-                                <FormSelect  v-model="state.data.level" class="w-full">
-                                    <option value="">Select Class Level</option>
-                                    <option value="Beginner">Beginner</option>
-                                    <option value="Intermediate">Intermediate</option>
-                                    <option value="Advance">Advance</option>
-                                    <option value="All Level">All Level</option>
-                                </FormSelect>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Capacity</FormLabel>
-                                <FormInput type="number" class="col-span-8" v-model="state.data.capacity" placeholder="Insert Capacity"/>
-                            </FormInline>
-
+                        <FormInline class="mt-2">
+                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Status</FormLabel>
+                            <FormSelect v-model="state.data.status_faq" class="w-full">
+                                <option value="">Select Status</option>
+                                <option value="0">Active</option>
+                                <option value="1">In Active</option>
                             
+                            </FormSelect>
+                        </FormInline>
                         </div>
-
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Class</FormLabel>
-                                <FormSelect  v-model="state.data.class_kat" class="w-full">
-                                    <option value="">Select Class</option>
-                                    <option value="Normal">Normal</option>
-                                    <option value="Hot">Hot</option>
-                                </FormSelect>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Virtual Class</FormLabel>
-                                <FormSelect  v-model="state.data.virtual_class" class="w-full">
-                                    <option value="">Select Virtual Class</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </FormSelect>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Duration (in minute)</FormLabel>
-                                <FormInput type="number" class="col-span-8" v-model="state.data.duration" placeholder="Insert Duration"/>
-                            </FormInline>
-                        </div>
-
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-60" style="text-align: left;">Class Image</FormLabel>
-                                <FormInput  type="file" @change="onFileChange" accept="image/x-png,image/gif,image/jpeg" class="col-span-8"/>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Video URL</FormLabel>
-                                <FormInput type="text" class="col-span-8" v-model="state.data.video" placeholder="Insert Video URL"/>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Status</FormLabel>
-                                <FormSelect v-model="state.data.status" class="w-full">
-                                    <option value="">Select Status</option>
-                                    <option value="0">Active</option>
-                                    <option value="1">In Active</option>
-                                
-                                </FormSelect>
-                            </FormInline>
-                        </div>
-
-                        
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-60" style="text-align: left;"> Class Description</FormLabel>
-                            <ClassicEditor v-model="state.data.desc"  />
-                        </div>
-
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-60" style="text-align: left;"> Facilities</FormLabel>
-                            <ClassicEditor v-model="state.data.fasilitas"  />
-                        </div>
-
-                        <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y">
-                            <FormLabel  htmlFor="horizontal-form-2" class="sm:w-60" style="text-align: left;"> Class Benefit</FormLabel>
-                            <ClassicEditor v-model="state.data.benefit"  />
-                        </div>
-
 
                     </Dialog.Description>
 
@@ -408,9 +297,8 @@
                         </Button>
                     </Dialog.Footer>
                 
-                </DialogPanel>
-            </div>
-        </div>
+                </Dialog.Panel>
+        
     </Dialog>
 
     
@@ -452,19 +340,10 @@
         successModalPreview.value = value;
         if (successModalPreview.value ==false) {
             document.body.style.overflow = 'none';
-            state.data.id=""
-            state.data.nama=""
-            state.data.level=""
-            state.data.capacity=""
-            state.data.class_kat=""
-            state.data.virtual_class=""
-            state.data.video=""
-            state.data.status=""
-            state.data.desc=""
-            state.data.fasilitas=""
-            state.data.benefit=""
-            state.data.file=""
-            state.data.duration=''
+            state.data.id=''
+            state.data.title=''
+            state.data.faq=''
+            state.data.status_faq=''
         }
     };
 
@@ -485,10 +364,11 @@
     const image = ref("")
     const tanggal= ref(moment().startOf('month').format('YYYY-MM-DD')+" - "+moment().endOf('month').format('YYYY-MM-DD'))
     const pesan = ref("")
-    const level = ref("")
+    const source = ref("")
     const show = ref(20)
     const action = ref("Add New")
-    const baseUrl = ref('https://login.yogafitidonline.com/api/storage/studio/')
+    const baseUrl = ref('http://192.168.5.65:5050/storage/studio/')
+    const pt=ref(false)
     const state = reactive(
         {
             listSource:{},
@@ -498,18 +378,9 @@
             datas:{},
             data:{
                 id:"",
-                nama:"",
-                level:"",
-                capacity:"",
-                class_kat:"",
-                virtual_class:"",
-                video:"",
-                status:"",
-                duration:"",
-                desc:"",
-                fasilitas:"",
-                benefit:"",
-                file:""
+                title:"",
+                faq:"",
+                status_faq:"",
             }
         }
     )
@@ -527,8 +398,14 @@
         loading.value = true
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/class?page=' + page+ '&q=' + search.value+ '&level=' + level.value)
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/faq?page=' + page+ '&q=' + search.value)
+        }else{
+            url = Api.get('/sales/faq?page=' + page+ '&q=' + search.value)
+        }
+
+        await url.then(response => {
             state.listData = response.data.data
             loading.value = false
         }).catch(error => {
@@ -560,26 +437,27 @@
         pesan.value="Please Wait, Process Get Data"
         const token = localStorage.getItem('token_iss')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/class', {
-            params: {
-                id : id
-            } 
-        })
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/faq', {
+                params: {
+                    id : id
+                } 
+            })
+        }else{
+            url = Api.get('/sales/faq', {
+                params: {
+                    id : id
+                } 
+            })
+        }
+
+        await url.then(response => {
             state.datas = response.data.data
-            state.data.id = state.datas[0].id
-            state.data.nama=state.datas[0].class_name
-            state.data.level=state.datas[0].class_level
-            state.data.capacity=state.datas[0].capacity
-            state.data.class_kat=state.datas[0].class_kat
-            state.data.virtual_class=state.datas[0].virtual_class
-            state.data.video=state.datas[0].url
-            state.data.status=state.datas[0].status_class
-            state.data.desc=state.datas[0].class_desc
-            state.data.fasilitas=state.datas[0].class_facilities
-            state.data.benefit=state.datas[0].class_benefit
-            state.data.file=state.datas[0].file
-            state.data.duration=state.datas[0].duration
+            state.data.id = state.datas[0].odata
+            state.data.title=state.datas[0].title
+            state.data.faq=state.datas[0].faq
+            state.data.status_faq=state.datas[0].status_faq
             action.value ='Update'
             AddModal.value = true
             loadingsycn.value = false
@@ -605,28 +483,25 @@
         const token = localStorage.getItem('token_iss')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
         if (action.value=='Add New') {
-            const formdata = new FormData();
-            formdata.append('image', image.value);
-            formdata.append("class_name", state.data.nama);
-            formdata.append("capacity", state.data.capacity);
-            formdata.append("class_level", state.data.level);
-            formdata.append("class_kat", state.data.class_kat);
-            formdata.append("virtual_class", state.data.virtual_class);
-            formdata.append("class_desc", state.data.desc);
-            formdata.append("class_facilities", state.data.fasilitas);
-            formdata.append("class_benefit", state.data.benefit);
-            formdata.append("duration", state.data.duration);
-            formdata.append("url", state.data.video);
-            formdata.append("status_class", state.data.status);
-            await Api.post('/admin/class', formdata, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            }).then(async (response) => {
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.post('/admin/faq', {
+                    title : state.data.title,
+                    faq : state.data.faq,
+                    status_faq : state.data.status_faq,
+                })
+            }else{
+                url = Api.post('/sales/faq', {
+                    title : state.data.title,
+                    faq : state.data.faq,
+                    status_faq : state.data.status_faq,
+                })
+            }
+            await url.then(async (response) => {
                 loadingsycn.value = false
                 basicModalPreview.value = false
                 setSuccessModalPreview(true)
-                pesan.value = "Success Add Class"
+                pesan.value = "Success Add Packages"
                 AddModal.value = false
                 tampilData()
             }).catch(error => {
@@ -636,30 +511,28 @@
                 setWarningModalPreview(true)
             })
         } else {
-            const formdata = new FormData();
-            formdata.append('image', image.value);
-            formdata.append("id", state.data.id);
-            formdata.append('image', image.value);
-            formdata.append("class_name", state.data.nama);
-            formdata.append("capacity", state.data.capacity);
-            formdata.append("class_level", state.data.level);
-            formdata.append("class_kat", state.data.class_kat);
-            formdata.append("virtual_class", state.data.virtual_class);
-            formdata.append("class_desc", state.data.desc);
-            formdata.append("class_facilities", state.data.fasilitas);
-            formdata.append("class_benefit", state.data.benefit);
-            formdata.append("duration", state.data.duration);
-            formdata.append("url", state.data.video);
-            formdata.append("status_class", state.data.status);
-            await Api.post('/admin/Updatekelas', formdata, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            }).then(async (response) => {
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.put('/admin/faq', {
+                    id : state.data.id,
+                    title : state.data.title,
+                    faq : state.data.faq,
+                    status_faq : state.data.status_faq,
+                })
+            }else{
+                url = Api.put('/sales/faq', {
+                    id : state.data.id,
+                    title : state.data.title,
+                    faq : state.data.faq,
+                    status_faq : state.data.status_faq,
+                })
+            }
+            await url.then(async (response) => {
+            
+                pesan.value = "Success Update Packages"
+                setSuccessModalPreview(true)
                 loadingsycn.value = false
                 basicModalPreview.value = false
-                setSuccessModalPreview(true)
-                pesan.value = "Success Update Class"
                 AddModal.value = false
                 tampilData()
             }).catch(error => {
@@ -671,6 +544,7 @@
         }
 
     }
+
 
     onMounted(async() => {
     
@@ -684,11 +558,6 @@
 
 
     watch(tanggal, (newQuestion, oldQuestion) => {
-        tampilData()
-    })
-
-
-    watch(level, (newQuestion, oldQuestion) => {
         tampilData()
     })
 

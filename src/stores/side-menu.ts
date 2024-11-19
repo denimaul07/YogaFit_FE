@@ -121,7 +121,7 @@ export const useSideMenuStore = defineStore("sideMenu", {
         icon: "Users",
         pageName: "Team",
         title: "Switch Member",
-        roles : ["salesLeader"],
+        roles : ["salesLeader","salesManager"],
       },
 
       {
@@ -206,12 +206,36 @@ export const useSideMenuStore = defineStore("sideMenu", {
         icon: "Layers",
         pageName: "CrmSetting",
         title: "Master Data",
-        roles : ["superAdmin","admin"],
+        roles : ["superAdmin","admin","salesManager"],
         subMenu: [
           {
             icon: "List",
             pageName: "CrmSetting",
             title: "Crm Settings",
+            roles : ["superAdmin","admin"],
+          },
+          {
+            icon: "List",
+            pageName: "Banner",
+            title: "Banner",
+            roles : ["superAdmin","admin"],
+          },
+          {
+            icon: "List",
+            pageName: "Course",
+            title: "Course",
+            roles : ["superAdmin","admin"],
+          },
+          {
+            icon: "List",
+            pageName: "Workshop",
+            title: "Workshop",
+            roles : ["superAdmin","admin"],
+          },
+          {
+            icon: "List",
+            pageName: "Event",
+            title: "Event",
             roles : ["superAdmin","admin"],
           },
           {
@@ -222,9 +246,22 @@ export const useSideMenuStore = defineStore("sideMenu", {
           },
           {
             icon: "List",
+            pageName: "Faq",
+            title: "FAQ",
+            roles : ["superAdmin","admin"],
+          },
+
+          {
+            icon: "List",
+            pageName: "Instructor",
+            title: "Yoga Instructor",
+            roles : ["superAdmin","admin"],
+          },
+          {
+            icon: "List",
             pageName: "packages",
             title: "Packages",
-            roles : ["superAdmin","admin"],
+            roles : ["superAdmin","admin","salesManager"],
           },
           {
             icon: "List",
@@ -236,7 +273,7 @@ export const useSideMenuStore = defineStore("sideMenu", {
             icon: "List",
             pageName: "program",
             title: "Program",
-            roles : ["superAdmin","admin"],
+            roles : ["superAdmin","admin","salesManager"],
           },
           {
             icon: "List",
@@ -254,7 +291,7 @@ export const useSideMenuStore = defineStore("sideMenu", {
             icon: "List",
             pageName: "user",
             title: "Users",
-            roles : ["superAdmin","admin"],
+            roles : ["superAdmin","admin","salesManager"],
           }
         ],
       },

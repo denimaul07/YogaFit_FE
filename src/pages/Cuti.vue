@@ -483,8 +483,8 @@
                                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
                                                         <div class="flex items-center justify-center" >
                                                             <div class="text-success" v-if="data.status_contract == 0">Active</div>
-                                                            <div class="text-danger" v-if="data.status_contract == 1">Non Active</div>
-                                                            <div class="text-warning" v-if="data.status_contract == 2">Request Cuti</div>
+                                                            <div class="text-danger" v-else-if="data.status_contract == 1">Non Active</div>
+                                                            <div class="text-warning" v-else-if="data.status_contract == 2">Request Cuti</div>
                                                             <div class="text-yellow-300" v-else>Cuti</div>
                                                         </div>
                                                         </Table.Td>
@@ -682,7 +682,7 @@
         pesan.value="Mohon Tunggu ya, Lagi Ambil Data"
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/users', {
+        await Api.get('/leader/users', {
             params: {
                 id : member
             } 
@@ -709,7 +709,7 @@
             state.data.studio = state.datas[0].departments.deptname
             state.data.status_user = state.datas[0].status_users.toString() ?? ''
             action.value = 'UPDATE';
-            Api.get("/admin/contract", {
+            Api.get("/leader/contract", {
                 params: {
                     id: member,
                 },
@@ -745,7 +745,7 @@
     const tampilProvince = async () => {
         const token = localStorage.getItem("token_yogafit");
         Api.defaults.headers.common["Authorization"] = "Bearer " + token;
-        await Api.get("/admin/get_province")
+        await Api.get("/leader/get_province")
             .then((response) => {
             state.listProvince = response.data.data;
             loading.value = false;
@@ -768,7 +768,7 @@
         const formdata = new FormData();
         formdata.append('id', state.data.id);
         formdata.append('idmember', state.data.id_members);
-        await Api.post('/admin/approveCuti', formdata, {
+        await Api.post('/leader/approveCuti', formdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -807,7 +807,7 @@
     watch(province, (newQuestion, oldQuestion) => {
     const token = localStorage.getItem("token_yogafit");
     Api.defaults.headers.common["Authorization"] = "Bearer " + token;
-    Api.get("/admin/get_city?id=" + province.value)
+    Api.get("/leader/get_city?id=" + province.value)
         .then((response) => {
         state.listCity = response.data.data;
         })
@@ -826,7 +826,7 @@
     watch(city, (newQuestion, oldQuestion) => {
     const token = localStorage.getItem("token_yogafit");
     Api.defaults.headers.common["Authorization"] = "Bearer " + token;
-    Api.get("/admin/get_district?id=" + city.value)
+    Api.get("/leader/get_district?id=" + city.value)
         .then((response) => {
         state.listDistrict = response.data.data;
         })
@@ -845,7 +845,7 @@
     watch(district, (newQuestion, oldQuestion) => {
     const token = localStorage.getItem("token_yogafit");
     Api.defaults.headers.common["Authorization"] = "Bearer " + token;
-    Api.get("/admin/get_subdistrict?id=" + district.value)
+    Api.get("/leader/get_subdistrict?id=" + district.value)
         .then((response) => {
         state.listSubDistrict = response.data.data;
         })

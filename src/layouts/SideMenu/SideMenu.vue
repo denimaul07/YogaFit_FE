@@ -37,7 +37,7 @@ onMounted(() => {
   <div 
     class="pt-2 pb-7 before:content-[''] before:absolute before:inset-0 before:bg-fixed before:bg-no-repeat before:bg-skew-pattern dark:before:bg-skew-pattern-dark"
   >
-    <DarkModeSwitcher />
+    <!-- <DarkModeSwitcher /> -->
     <MainColorSwitcher />
     <MobileMenu />
     <TopBar />

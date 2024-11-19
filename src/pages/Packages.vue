@@ -496,8 +496,14 @@
         loading.value = true
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/packages?page=' + page+ '&q=' + search.value)
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/packages?page=' + page+ '&q=' + search.value)
+        }else{
+            url = Api.get('/sales/packages?page=' + page+ '&q=' + search.value)
+        }
+
+        await url.then(response => {
             state.listData = response.data.data
             loading.value = false
         }).catch(error => {
@@ -529,12 +535,22 @@
         pesan.value="Please Wait, Process Get Data"
         const token = localStorage.getItem('token_iss')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/packages', {
-            params: {
-                id : id
-            } 
-        })
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/packages', {
+                params: {
+                    id : id
+                } 
+            })
+        }else{
+            url = Api.get('/sales/packages', {
+                params: {
+                    id : id
+                } 
+            })
+        }
+
+        await url.then(response => {
             state.datas = response.data.data
             state.data.id = state.datas[0].id
             state.data.packages_name=state.datas[0].packages_name
@@ -571,17 +587,33 @@
         const token = localStorage.getItem('token_iss')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
         if (action.value=='Add New') {
-            await Api.post('/admin/packages', {
-                packages_name : state.data.packages_name,
-                type : state.data.type,
-                validity : state.data.validity,
-                price : state.data.price,
-                accesss : state.data.accesss,
-                sessions : state.data.sessions,
-                duration : state.data.duration,
-                jenis : state.data.jenis,
-                status_packages : state.data.status_packages,
-            }).then(async (response) => {
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.post('/admin/packages', {
+                    packages_name : state.data.packages_name,
+                    type : state.data.type,
+                    validity : state.data.validity,
+                    price : state.data.price,
+                    accesss : state.data.accesss,
+                    sessions : state.data.sessions,
+                    duration : state.data.duration,
+                    jenis : state.data.jenis,
+                    status_packages : state.data.status_packages,
+                })
+            }else{
+                url = Api.post('/sales/packages', {
+                    packages_name : state.data.packages_name,
+                    type : state.data.type,
+                    validity : state.data.validity,
+                    price : state.data.price,
+                    accesss : state.data.accesss,
+                    sessions : state.data.sessions,
+                    duration : state.data.duration,
+                    jenis : state.data.jenis,
+                    status_packages : state.data.status_packages,
+                })
+            }
+            await url.then(async (response) => {
                 loadingsycn.value = false
                 basicModalPreview.value = false
                 setSuccessModalPreview(true)
@@ -595,18 +627,35 @@
                 setWarningModalPreview(true)
             })
         } else {
-            await Api.put('/admin/packages', {
-                id : state.data.id,
-                packages_name : state.data.packages_name,
-                type : state.data.type,
-                validity : state.data.validity,
-                price : state.data.price,
-                accesss : state.data.accesss,
-                sessions : state.data.sessions,
-                duration : state.data.duration,
-                jenis : state.data.jenis,
-                status_packages : state.data.status_packages,
-            }).then(async (response) => {
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.put('/admin/packages', {
+                    id : state.data.id,
+                    packages_name : state.data.packages_name,
+                    type : state.data.type,
+                    validity : state.data.validity,
+                    price : state.data.price,
+                    accesss : state.data.accesss,
+                    sessions : state.data.sessions,
+                    duration : state.data.duration,
+                    jenis : state.data.jenis,
+                    status_packages : state.data.status_packages,
+                })
+            }else{
+                url = Api.put('/sales/packages', {
+                    id : state.data.id,
+                    packages_name : state.data.packages_name,
+                    type : state.data.type,
+                    validity : state.data.validity,
+                    price : state.data.price,
+                    accesss : state.data.accesss,
+                    sessions : state.data.sessions,
+                    duration : state.data.duration,
+                    jenis : state.data.jenis,
+                    status_packages : state.data.status_packages,
+                })
+            }
+            await url.then(async (response) => {
             
                 pesan.value = "Success Update Packages"
                 setSuccessModalPreview(true)

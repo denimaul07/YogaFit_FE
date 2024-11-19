@@ -1857,3 +1857,10 @@
   }
 }
 </style>
+
+<style scoped>
+    button, [type='button'], [type='reset'], [type='submit'] {
+        -webkit-appearance: button;
+        background-image: none;
+    }
+</style>

@@ -56,15 +56,6 @@
     </div>
 
     <div class="grid grid-cols-12 gap-6">
-        <!-- <div class="col-span-12 md:col-span-2 2xl:col-span-2">
-            <div class="pb-10 -mb-10 2xl:border-l">
-                <div class="grid grid-cols-12 pl-0 2xl:pl-0 gap-x-6 2xl:gap-x-0 gap-y-6">
-                    <div class="col-span-12 mt-3 md:col-span-6 xl:col-span-10 2xl:col-span-12 2xl:mt-8">
-                        <listMenu></listMenu>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="col-span-12 2xl:col-span-12 pt-12"> 
         
             <div class="grid grid-cols-12 gap-6">
@@ -153,16 +144,8 @@
                                             {{ data.no_telp }}
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            <div class="flex">
-                                                <div class="w-10 h-10 image-fit zoom-in">
-                                                    <Tippy
-                                                    as="img"
-                                                    alt="Midone Tailwind HTML Admin Template"
-                                                    class="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                                                    :src="baseUrl+data.foto"
-                                                    />
-                                                </div>
-                                            </div>
+                                            <a-image :width="50" :src="baseUrl+data.foto" 
+                                            fallback="data:image/png;base64,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"/>
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
                                             <div
@@ -263,9 +246,8 @@
         <Dialog.Panel>
             <Dialog.Title>
                 <h2 class="mr-auto text-base font-medium">
-                    {{ headers }}
+                    {{ headers }}  
                 </h2>
-        
             </Dialog.Title>
             <Dialog.Description class="grid grid-cols-12 gap-4 gap-y-3">
                 <div class="col-span-12 sm:col-span-6">
@@ -285,32 +267,15 @@
                     <FormInput id="modal-form-1" type="text" v-model="state.data.telp" placeholder="Insert User Telp" />
                 </div>
 
-                <!-- <div class="col-span-12 sm:col-span-4">
-                    <FormLabel htmlFor="modal-form-1"> Password</FormLabel>
-                    <FormInput id="modal-form-1" type="password" v-model="state.data.password" placeholder="Insert User Password" />
+                <div class="col-span-12 sm:col-span-6">
+                    <FormLabel htmlFor="modal-form-1"> Foto</FormLabel>
+                    <FormInput type="file" @change="onFileChange" accept="image/jpg, image/jpeg, image/png" />
                 </div>
 
-                <div class="col-span-12 sm:col-span-4">
-                    <FormLabel htmlFor="modal-form-1"> Departement</FormLabel>
-                    <FormSelect  class="w-full" id="modal-form-6" v-model="kode">
-                        <option v-for="item in state.listDepartement" :key="item.id"  :value="item.id">{{item.deptname}}</option>
-                    </FormSelect>
-                </div> -->
-
-                <!-- <div class="col-span-12 sm:col-span-4">
-                    <FormLabel htmlFor="modal-form-1"> Roles</FormLabel>
-        
-                    <div class="flex flex-col mt-2">
-                        <label v-for="item in state.listRole" :key="item.id"  class="flex items-center">
-                            <input
-                                type="checkbox"
-                                :value="item.name" v-model="selected"
-                                class="form-checkbox mr-2"
-                            />
-                            <span>{{ item.name }}</span>
-                        </label>
-                    </div>
-                </div> -->
+                <div class="col-span-12 sm:col-span-12">
+                    <FormLabel htmlFor="modal-form-1"> Desc Teacher</FormLabel>
+                    <ckeditor :editor="editor" v-model="state.data.ket"  />
+                </div>
 
                 <div class="col-span-12 sm:col-span-6">
                     <FormLabel htmlFor="modal-form-1"> Status Users</FormLabel>
@@ -320,6 +285,8 @@
                         <option value="1">Inactive</option>
                     </FormSelect>
                 </div>
+
+            
             </Dialog.Description>
             <Dialog.Footer>
                 <Button type="button" variant="outline-secondary" @click="
@@ -360,6 +327,11 @@
     import man from "../assets/images/sabar.png"
     import 'vue-select/dist/vue-select.css';
     import 'vue-multiselect/dist/vue-multiselect.ssr.css'
+    import CKEditor from '@ckeditor/ckeditor5-vue'
+    import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+    
+    const editor = ClassicEditor
+    const ckeditor = CKEditor.component
 
     const loading = ref(true)
     const loadingsycn = ref("")
@@ -389,6 +361,7 @@
             kode:"",
             role:[],
             status_user:"",
+            ket:"",
             telp:""
         }
         
@@ -417,6 +390,7 @@
             state.data.status_user = '';
             state.data.role=[];
             state.data.id = '';
+            state.data.ket = '';
             action.value = 'INSERT';
             headers.value = 'Add New Data';
 
@@ -460,6 +434,7 @@
             state.data.name = state.datas[0].name
             state.data.email = state.datas[0].email
             state.data.telp = state.datas[0].no_telp
+            state.data.ket = state.datas[0].desc_teacher
             state.data.status_user = state.datas[0].status_users
             action.value = 'UPDATE';
             headerFooterModalPreview.value = true
@@ -478,21 +453,37 @@
         })
     }
 
+    const image= ref("")
+
+    const onFileChange = (e) => {
+        image.value = e.target.files[0];
+    };
+
     const saveData = async () => {
-
+        loadingsycn.value = true
+        basicModalPreview.value = true
+        pesan.value="Please Wait, Process Save Data"
         if(action.value=="INSERT"){
-            await Api.post('/admin/teacher', {
-                name : state.data.name,
-                email : state.data.email,
-                telp : state.data.telp,
-                status_user : state.data.status_user,
 
+
+            const formdata = new FormData();
+            formdata.append('file', image.value);
+            formdata.append('name', state.data.name);
+            formdata.append('email', state.data.email);
+            formdata.append('telp', state.data.telp);
+            formdata.append('status_user', state.data.status_user);
+            formdata.append('ket', state.data.ket);
+            await Api.post('/admin/teacher', formdata, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             })
             .then(async (response) => {
                 await tampilData()
                 setSuccessModalPreview(true)
                 pesan.value = "Data Success Added"
                 setHeaderFooterModalPreview(false)
+                loadingsycn.value = false
 
             }).catch(error => {
                 const object1 = error.response.data.data
@@ -500,22 +491,25 @@
                 setWarningModalPreview(true)
             })
         }else{
-            await Api.put('/admin/teacher', {
-                id :  state.data.id,
-                name : state.data.name,
-                email : state.data.email,
-                telp : state.data.telp,
-                status_user : state.data.status_user,
+            const formdata = new FormData();
+            formdata.append('file', image.value);
+            formdata.append('id', state.data.id);
+            formdata.append('name', state.data.name);
+            formdata.append('email', state.data.email);
+            formdata.append('telp', state.data.telp);
+            formdata.append('status_user', state.data.status_user);
+            formdata.append('ket', state.data.ket);
+            await Api.post('/admin/update_teacher', formdata, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             }).then(async (response) => {
 
                 await tampilData()
-
                 setSuccessModalPreview(true)
-                pesan.value = "Data Success Updated"
-            
+                pesan.value = "Data Success Update"
                 setHeaderFooterModalPreview(false)
-                tabulator.value.replaceData(tableData.value.data);
-                
+                loadingsycn.value = false
 
             }).catch(error => {
                 const object1 = error.response.data.data

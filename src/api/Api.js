@@ -43,10 +43,10 @@ Api.interceptors.request.use(
           })
           .catch((error) => {
             // Jika gagal memperoleh token baru, lakukan sesuatu di sini
-            localStorage.removeItem('token_iss')
+            localStorage.removeItem('token_yogafit')
             localStorage.removeItem('user')
             localStorage.removeItem('cartItems')
-            localStorage.removeItem('expired_in_iss')
+            localStorage.removeItem('expired_in_yogafit')
             //delete header axios
             delete Api.defaults.headers.common['Authorization']
             router.push({name: 'login' })

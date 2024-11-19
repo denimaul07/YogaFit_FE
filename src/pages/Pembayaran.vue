@@ -19,25 +19,45 @@
         </Dialog>
     </div>
 
-    <div v-if="loading==true">
-        <Dialog :open="basicModalPreview" @close="setBasicModalPreview(false);">
-            <div class="fixed inset-0 flex items-center justify-center p-4">
-                <Dialog.Panel>
-                    <div class="p-5 text-center pt-10">
-                        <br><br>
-                        <div class="flex flex-col items-center justify-end col-span-12">
-                            <img
-                                alt="Midone Tailwind HTML Admin Template"
-                                class="w-1/2 -mt-16 -intro-x"
-                                :src="man"
-                                />
-                            <div class="mt-2 text-1xl text-center">Mohon Tunggu Ya, Lagi Proses Ambil Data :)</div>
-                        </div>
-                    </div>
-                </Dialog.Panel>
+    <a-modal v-model:open="modalBukti" title="Bukti Pembayaran" >
+        <div class="row">
+            <label class="col-sm-4 col-form-label"> Upload Pembayaran </label>
+            <div class="col-sm-8">
+                <input
+                type="file" class="form-control"
+                @change="onFileChange"
+                accept="image/x-png,image/gif,image/jpeg,application/pdf"
+                />
             </div>
-        </Dialog>
-    </div>
+        </div>
+
+        <div class="row pt-3 text-center" v-if="image!=null">
+            <a-image
+                :width="400"
+                :src="'https://login.yogafitidonline.com/api/storage/pembayaran/'+image"
+            />
+        </div>
+
+        <template #footer>
+            <Button  variant="primary" class="btn btn-primary" @click="saveBukti">
+                <i class="fa fa-send me-2" aria-hidden="true"></i>
+                Save
+            </Button>
+
+        </template>
+
+        <a-modal v-model:open="processing"  :footer="null" :closable=false   width="400px">
+            <div style="align-items:center;justify-content: center;display: flex;" width="100px">
+                <img  class="w-1/2 -intro-x" :src="man" alt="vector women with leptop"/>
+            </div>
+
+            <div style="align-items:center;justify-content: center;display: flex;">
+                Please Wait, Process Get Data
+            </div>
+        </a-modal>
+    </a-modal>
+
+
 
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="col-span-12 2xl:col-span-4">
@@ -126,66 +146,77 @@
                     </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                    <Table.Tr v-if="state.listData.total == 0" class="intro-x">
-                        <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        <div class="flex flex-col items-center justify-end col-span-12">
-                            <div class="mt-2 text-xs text-center">Data Not Found</div>
-                        </div>
-                        </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr class="intro-x" v-for="(data, index) in state.listData.data" :key="data.id">
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
-                            {{ state.listData.from + index }}
-                        </div>
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                            <div class="flex items-center">
-                                <Tippy as="div"  content="Hapus">
-                                    <a class="flex items-center text-danger" href="#" @click="hapus(data.noinvoice)">
-                                        <Lucide icon="Trash" class="w-4 h-4 mr-5" /> 
-                                    </a>
-                                </Tippy>
-
-                                <Tippy as="div"  content="Print Invoice">
-                                    <a class="flex items-center text-primary" href="#" @click="print(data.noinvoice)">
-                                        <Lucide icon="Printer" class="w-4 h-4 mr-1" /> 
-                                    </a>
-                                </Tippy>
+                        <Table.Tr v-if="loading" class="intro-x">
+                            <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                <a-skeleton />
+                            </Table.Td>
+                        </Table.Tr>
+                        <Table.Tr v-else-if="state.listData.total == 0" class="intro-x">
+                            <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                            <div class="flex flex-col items-center justify-end col-span-12">
+                                <div class="mt-2 text-xs text-center">Data Not Found</div>
                             </div>
-                           
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-        
-                        <a class="flex items-center text-success" href="#" @click="lihat(data.noinvoice)">
-                            {{ data.noinvoice }}
-                        </a>
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.tanggal }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.nama_cust }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.email }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.no_telp }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.nama_paket }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.ket }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                            {{ (1 * data.total).toLocaleString('id-ID', { style: 'currency',  currency: 'IDR', }).slice(0, -3) }}
-                        </Table.Td>
-                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
-                        {{ data.kasir }}
-                        </Table.Td>
-                    </Table.Tr>
+                            </Table.Td>
+                        </Table.Tr>
+                        <Table.Tr class="intro-x" v-for="(data, index) in state.listData.data" :key="data.id" v-else>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                            <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
+                                {{ state.listData.from + index }}
+                            </div>
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <Tippy as="div"  content="Hapus">
+                                        <a class="flex items-center text-danger" href="#" @click="hapus(data.noinvoice)">
+                                            <Lucide icon="Trash" class="w-4 h-4 mr-5" /> 
+                                        </a>
+                                    </Tippy>
+
+                                    <Tippy as="div"  content="Print Invoice">
+                                        <a class="flex items-center text-primary" href="#" @click="print(data.noinvoice)">
+                                            <Lucide icon="Printer" class="w-4 h-4 mr-5" /> 
+                                        </a>
+                                    </Tippy>
+
+                                    <Tippy as="div"  content="Upload Bukti">
+                                        <a class="flex items-center text-warning" href="#" @click="bukti(data.noinvoice,data.file)">
+                                            <Lucide icon="Camera" class="w-4 h-4 mr-1" /> 
+                                        </a>
+                                    </Tippy>
+                                </div>
+                            
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+            
+                            <a class="flex items-center text-success" href="#" @click="lihat(data.noinvoice)">
+                                {{ data.noinvoice }}
+                            </a>
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.tanggal }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.nama_cust }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.email }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.no_telp }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.nama_paket }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.ket }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                                {{ (1 * data.total).toLocaleString('id-ID', { style: 'currency',  currency: 'IDR', }).slice(0, -3) }}
+                            </Table.Td>
+                            <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-center whitespace-nowrap">
+                            {{ data.kasir }}
+                            </Table.Td>
+                        </Table.Tr>
                     </Table.Tbody>
                 </Table>
                 </div>
@@ -777,6 +808,7 @@
     import man from "../assets/images/sabar.png"
     import Tippy from "../base-components/Tippy";
     import { useDebounceFn } from '@vueuse/core'
+import { identity } from 'lodash'
     const basicModalPreview = ref(true);
     const warningModalPreview = ref(false);
     const setWarningModalPreview = (value) => {
@@ -805,15 +837,14 @@
     const user = store.getters['auth/currentUser']
     const loading = ref("")
     const loadingsycn = ref("")
-    const kategori = ref("")
+    const modalBukti = ref(false)
     const tanggal= ref("")
     const pdfUrl = ref("");
     const search=ref("")
     const searchUser=ref("")
     const pesan = ref("")
-    const tanggalExport = ref("")
-    const show = ref(20)
     const image = ref("")
+    const processing = ref(false)
     const courses = ref([])
     const state = reactive({
         listData: {},
@@ -842,7 +873,14 @@
         }
     };
 
+
+    const bukti = (id,file) => {
+        state.data.id = id
+        image.value = file
+        modalBukti.value = true
+    }
     
+
     const addValue = async () => {
         courses.value.push({
             varian: "",
@@ -898,9 +936,8 @@
 
 
     const tampilData = async (page = 1) => {
-        loadingsycn.value = true
+        loading.value = true
         basicModalPreview.value = true
-        pesan.value="Please Wait, Proccesing Get Data"
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
         let url=''
@@ -912,6 +949,7 @@
         await url.then(response => {
             state.listData = response.data.data
             basicModalPreview.value = false
+            loading.value = false
         }).catch(error => {
             if(error.response.data.status_code==403){
                 router.push({name: '403'})
@@ -924,7 +962,7 @@
     }
 
     const tampilKategori = async (page = 1) => {
-        loadingsycn.value = true
+        loading.value = true
         basicModalPreview.value = true
         pesan.value="Please Wait, Proccesing Get Data"
         const token = localStorage.getItem('token_yogafit')
@@ -938,6 +976,7 @@
         await url.then(response => {
             state.listKategori = response.data.data
             basicModalPreview.value = false
+            loading.value = false
         }).catch(error => {
             if(error.response.data.status_code==403){
                 router.push({name: '403'})
@@ -1035,6 +1074,44 @@
             setWarningModalPreview(true)
         })
     }
+
+    const saveBukti = async () => {
+        processing.value = true
+        basicModalPreview.value = true
+        pesan.value="Please Wait, Process Save Data"
+        const token = localStorage.getItem('token_iss')
+        Api.defaults.headers.common['Authorization'] = "Bearer " +token
+        let url=''
+        const formdata = new FormData();
+        formdata.append('file', image.value);
+        formdata.append("id", state.data.id);
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.post('/admin/saveBukti', formdata, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        }else{
+            url = Api.post('/sales/saveBukti', formdata, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        }
+        await url.then(async (response) => {
+            processing.value = false
+            pesan.value = "Success Upload Pembayaran"
+            modalBukti.value = false
+            tampilData()
+        
+        }).catch(error => {
+
+            const object1 = error.response.data.data
+            pesan.value =  Object.values(object1).toString()
+            setWarningModalPreview(true)
+        })
+    }
+
 
     const pilihuser = (id, name, telp, email) => {
         state.data.id=id

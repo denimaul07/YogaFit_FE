@@ -19,16 +19,36 @@
         </Dialog>
     </div>
 
+    <div v-if="loading==true">
+        <Dialog :open="basicModalPreview" @close="setBasicModalPreview(false);">
+            <div class="fixed inset-0 flex items-center justify-center p-4">
+                <Dialog.Panel>
+                    <div class="p-5 text-center pt-10">
+                        <br><br>
+                        <div class="flex flex-col items-center justify-end col-span-12">
+                            <img
+                                alt="Midone Tailwind HTML Admin Template"
+                                class="w-1/2 -mt-16 -intro-x"
+                                :src="man"
+                                />
+                            <div class="mt-2 text-1xl text-center">Mohon Tunggu Ya, Lagi Proses Ambil Data :)</div>
+                        </div>
+                    </div>
+                </Dialog.Panel>
+            </div>
+        </Dialog>
+    </div>
+
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="col-span-12 2xl:col-span-4">
             <div class="flex flex-wrap items-center col-span-12  intro-y sm:flex-nowrap">
                 <RouterLink :to="{ name: 'Dashboard' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="Home" class="w-4 h-4 mr-3" /> Home</RouterLink>
-                <RouterLink :to="{ name: 'program' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="ChevronRight" class="w-4 h-4 mr-3" /> Master Program</RouterLink>
+                <RouterLink :to="{ name: 'Course' }" class="flex items-center pr-4 text-primary mt-5"><Lucide icon="ChevronRight" class="w-4 h-4 mr-3" /> Master Course</RouterLink>
             </div>
         
         </div>
         <div class="col-span-12 2xl:col-span-4">
-            <h2 class="mt-4 text-lg font-medium intro-y items-center text-center">List Data Program</h2>
+            <h2 class="mt-4 text-lg font-medium intro-y items-center text-center">List Data Course</h2>
         </div>
         <div class="col-span-12 2xl:col-span-4">
         
@@ -53,7 +73,7 @@
                     <div class="items-center sm:flex sm:mr-4">
                         <Button variant="primary" class="mr-2 shadow-md" @click="add">
                             <span class="flex items-center justify-center w-40 h-5">
-                                <Lucide icon="Plus" class="w-4 h-4" /> Add New Program
+                                <Lucide icon="Plus" class="w-4 h-4" /> Add New Course
                             </span>
                         </Button>
 
@@ -90,13 +110,22 @@
                                             No
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Program
+                                            Course
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Disc Program
+                                            Durasi
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                            Potongan Harga
+                                            Tanggal
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Teacher
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Studio
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Desc
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                             Status
@@ -115,46 +144,55 @@
                                             </div>
                                         </Table.Td>
                                     </Table.Tr>
-                                    <Table.Tr v-if="state.listData.total==0" class="intro-x">
+                                    <Table.Tr v-else-if="state.listData.total==0" class="intro-x">
                                         <Table.Td colspan="10" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]" >
                                             <div class="flex flex-col items-center justify-end col-span-12">
                                                 <div class="mt-2 text-xs text-center">Data Not Found</div>
                                             </div>
                                         </Table.Td>
                                     </Table.Tr>
-                                    <Table.Tr class="intro-x" v-for="(data, index) in state.listData.data" :key="data.id" >
+                                    <Table.Tr class="intro-x" v-for="(data, index) in state.listData.data" :key="data.id" v-else>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                                             <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
                                                 {{ state.listData.from + index }}
                                             </div>
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.program }}
+                                            {{ data.course }}
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ data.disc_program }} %
+                                            {{ data.durasi }}
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
-                                            {{ (1 * data.potongan_harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }).slice(0, -3) }}
+                                            {{ data.tanggal }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.teacher }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.studio }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.desc_course }}
                                         </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
                                             <div
                                                 :class="[
                                                 'flex items-center justify-center',
-                                                    { 'text-success': data.status_progran==0 },
-                                                    { 'text-danger': data.status_progran==1 }
+                                                    { 'text-success': data.status_course==0 },
+                                                    { 'text-danger': data.status_Course==1 }
                                                 ]"
                                             >
                                                 <!-- <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" /> -->
-                                                <div v-if="data.status_progran==0">Active</div>
-                                                <div v-else-if="data.status_progran==1">Non Active</div>
+                                                <div v-if="data.status_course==0">Active</div>
+                                                <div v-else-if="data.status_course==1">Non Active</div>
                                             
                                             </div>
                                         </Table.Td>
                             
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                                             <div class="flex items-center justify-center">
-                                                <a class="flex items-center text-success" href="#" @click="edit(data.id)">
+                                                <a class="flex items-center text-success" href="#" @click="edit(data)">
                                                     <Lucide icon="Pencil" class="w-4 h-4 mr-1" /> 
                                                 </a>
                                             </div>
@@ -232,64 +270,82 @@
         </Dialog.Panel>
     </Dialog>
 
-    <Dialog  size="xl" :open="AddModal"  @close="setAddModal(false)" >
+    <Dialog  :open="AddModal"  @close="setAddModal(false)" >
     
-                <Dialog.Panel>
-                    <Dialog.Title class="flex items-center px-5 py-3 border-b border-slate-200/60 dark:border-darkmode-400">
-                        <h2 class="mr-auto text-base font-medium">
-                            {{ action }} Program
-                        </h2>
+        <Dialog.Panel>
+            <Dialog.Title class="flex items-center px-5 py-3 border-b border-slate-200/60 dark:border-darkmode-400">
+                <h2 class="mr-auto text-base font-medium">
+                    {{ action }} Course
+                </h2>
 
-                        <Button type="button" variant="danger" class="mb-2 mr-1" @click="setAddModal(false)">
-                            <Lucide icon="XSquare" class="w-5 h-5" />
-                        </Button>
-                    </Dialog.Title>
-                    
-                    <Dialog.Description  class="grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12 sm:col-span-6 xl:col-span-6 intro-y">
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Program</FormLabel>
-                                <FormInput type="text" class="col-span-8" v-model="state.data.program" placeholder="Insert Program"/>
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Disc Program</FormLabel>
-                                <FormInput type="number" class="col-span-8" v-model="state.data.disc" placeholder="Insert Disc Program"/> 
-                            </FormInline>
-
-                        </div>
-
-                        <div class="col-span-12 sm:col-span-6 xl:col-span-6 intro-y">
-                    
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Potongan</FormLabel>
-                                <CurrencyInput type="text" class="transition duration-200 ease-in-out w-40 text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80" v-model="state.data.potongan" :options="{ currency: 'IDR' }" placeholder="Price" />
-                            </FormInline>
-
-                            <FormInline class="mt-2">
-                                <FormLabel  htmlFor="horizontal-form-2" class="sm:w-40" style="text-align: left;"> Status</FormLabel>
-                                <FormSelect v-model="state.data.status_progran" class="w-full">
-                                    <option value="">Select Status</option>
-                                    <option value="0">Active</option>
-                                    <option value="1">In Active</option>
-                                
-                                </FormSelect>
-                            </FormInline>
-                        </div>
-
-                    </Dialog.Description>
-
-                    <Dialog.Footer class="px-5 py-3 text-right border-t border-slate-200/60 dark:border-darkmode-400">
-                        <Button type="button" variant="outline-secondary" @click="setAddModal(false)" class="w-20 mr-1">
-                            Cancel
-                        </Button>
-                        <Button variant="primary" type="button" class="w-20" @click="save">
-                            SAVE
-                        </Button>
-                    </Dialog.Footer>
+                <Button type="button" variant="danger" class="mb-2 mr-1" @click="setAddModal(false)">
+                    <Lucide icon="XSquare" class="w-5 h-5" />
+                </Button>
+            </Dialog.Title>
+            
+            <Dialog.Description  class="grid grid-cols-12 gap-4 gap-y-3">
+                <div class="col-span-12 sm:col-span-12 xl:col-span-12 intro-y">
                 
-                </Dialog.Panel>
+                    
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Course</FormLabel>
+                        <a-input style="width:100%;border-radius:7px;border-color: rgb(217 217 217);padding: 4px 9px;" v-model:value="state.data.course" placeholder="Input Title"/>
+                    </FormInline> 
+                    
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Duration</FormLabel>
+                        <a-input style="width:100%;border-radius:7px;border-color: rgb(217 217 217);padding: 4px 9px;" v-model:value="state.data.durasi" placeholder="Input Duration"/>
+                    </FormInline> 
+
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Date</FormLabel>
+                        <a-input style="width:100%;border-radius:7px;border-color: rgb(217 217 217);padding: 4px 9px;" v-model:value="state.data.tanggal" placeholder="Input Date"/>
+                    </FormInline> 
+
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Teacher</FormLabel>
+                        <a-select style="width:100%"  v-model:value="state.data.teacher" show-search :filter-option="filter_search" placeholder="Search Teacher">
+                            <a-select-option  v-for="item in state.listTeacher" :key="item.id" :value="item.name" :label="item.name">
+                                {{ item.name }}
+                            </a-select-option>
+                        </a-select>
+                    </FormInline> 
+
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Studio</FormLabel>
+                        <a-select v-model:value="state.data.studio"  size="large" style="width: 100%"  placeholder="Cari Studio">
+                            <a-select-option  v-for="item in state.listDepartement" :key="item" :value="item.deptname" :label="item.deptname">{{item.deptname}} </a-select-option>
+                        </a-select>
+                    </FormInline> 
+
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Desc</FormLabel>
+                        <a-textarea v-model:value="state.data.desc_course" style="width: 100%" placeholder="Desc Course" :rows="4" />
+                    </FormInline> 
+                    <FormInline class="mt-2">
+                        <FormLabel  htmlFor="horizontal-form-2" class="sm:w-20" style="text-align: left;"> Status</FormLabel>
+                        <a-select v-model:value="state.data.status_course"  size="large" style="width: 100%"  placeholder="Pilih Status">
+                            <a-select-option value="">Semua Status</a-select-option>
+                            <a-select-option  value="0" label="Active">Active</a-select-option>
+                            <a-select-option value="1" label="Non Active">Non Active</a-select-option>
+                        </a-select>
+
+                    </FormInline>
+
+                </div>
+
+            </Dialog.Description>
+
+            <Dialog.Footer class="px-5 py-3 text-right border-t border-slate-200/60 dark:border-darkmode-400">
+                <Button type="button" variant="outline-secondary" @click="setAddModal(false)" class="w-20 mr-1">
+                    Cancel
+                </Button>
+                <Button variant="primary" type="button" class="w-20" @click="save">
+                    SAVE
+                </Button>
+            </Dialog.Footer>
+        
+        </Dialog.Panel>
         
     </Dialog>
 
@@ -320,6 +376,7 @@
     import { ClassicEditor } from "../base-components/Ckeditor";
     import man from "../assets/images/sabar.png"
     import { useDebounceFn } from '@vueuse/core'
+import { data } from 'jquery'
     const basicModalPreview = ref(true);
     const warningModalPreview = ref(false);
     const setWarningModalPreview = (value) => {
@@ -333,10 +390,13 @@
         if (successModalPreview.value ==false) {
             document.body.style.overflow = 'none';
             state.data.id=''
-            state.data.program=''
-            state.data.disc=''
-            state.data.potongan=''
-            state.data.status_progran=''
+            state.data.course=''
+            state.data.durasi=''
+            state.data.tanggal=''
+            state.data.teacher=[]
+            state.data.studio=[]
+            state.data.desc_course=''
+            state.data.status_course=[]
         }
     };
 
@@ -345,8 +405,6 @@
     let todaysDate = new Date()
     const token = localStorage.getItem('token_yogafit')
     Api.defaults.headers.common['Authorization'] = "Bearer " +token
-    const date = moment(todaysDate).format("MM")
-    const year = moment(todaysDate).format("Y")
     const router = useRouter()
     const store = useStore()
     const route = useRoute()
@@ -355,28 +413,26 @@
     const loadingsycn = ref("")
     const search = ref("")
     const image = ref("")
-    const tanggal= ref(moment().startOf('month').format('YYYY-MM-DD')+" - "+moment().endOf('month').format('YYYY-MM-DD'))
     const pesan = ref("")
-    const source = ref("")
-    const show = ref(20)
     const action = ref("Add New")
-    const baseUrl = ref('https://login.yogafitidonline.com/api/storage/studio/')
     const state = reactive(
         {
-            listSource:{},
-            source:{},
-            category:{},
             listData:{},
-            datas:{},
+            listTeacher:{},
+            listDepartement:{},
             data:{
                 id:"",
-                program:"",
-                disc:"",
-                potongan:"",
-                status_progran:""
+                course:"",
+                durasi:"",
+                tanggal:"",
+                teacher:[],
+                studio:[],
+                desc_course:"",
+                status_course:[]
             }
         }
     )
+
 
     const AddModal = ref(false);
     const setAddModal = (value) => {
@@ -386,22 +442,50 @@
         }
     };
 
+    const tampilDepartement = async () => {
+
+    
+        await Api.get('/admin/department')
+        .then(response => {
+            state.listDepartement = response.data.data
+        }).catch(error => {
+            
+            if(error.response.data.status_code==403){
+                router.push({name: '403'})
+            }else{
+                const object1 = error.response.data.data
+                pesan.value =  Object.values(object1).toString()
+                setWarningModalPreview(true)
+            }
+        })
+
+    }
+
+    const tampilTeacher = async () => {
+    
+        await Api.get("/admin/get_teacher")
+        .then((response) => {
+            state.listTeacher = response.data.data;
+            loading.value = false;
+            })
+            .catch((error) => {
+            if (error.response.data.status_code == 403) {
+                router.push({ name: "403" });
+            } else {
+                const object1 = error.response.data.data;
+                pesan.value = Object.values(object1).toString();
+                setWarningModalPreview(true);
+            }
+        });
+
+    };
 
     const tampilData = async (page = state.listData.current_page) => {
         loading.value = true
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-
-        let url=''
-        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
-            url = Api.get('/admin/program?page=' + page+ '&q=' + search.value)
-        
-        }else{
-            url = Api.get('/sales/program?page=' + page+ '&q=' + search.value)
-        
-        }
-
-        await url.then(response => {
+        await Api.get('/admin/course?page=' + page+ '&q=' + search.value)
+        .then(response => {
             state.listData = response.data.data
             loading.value = false
         }).catch(error => {
@@ -423,55 +507,27 @@
         AddModal.value = true
     }
 
-    const onFileChange = (e) => {
-        image.value = e.target.files[0];
-    };
 
-    const edit = async (id) => {
+    const edit = async (data) => {
         loadingsycn.value = true
         basicModalPreview.value = true
         pesan.value="Please Wait, Process Get Data"
-        const token = localStorage.getItem('token_iss')
-        Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        let url=''
-        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
-            url =  Api.get('/admin/program', {
-                    params: {
-                        id : id
-                    } 
-                })
-        
-        
-        }else{
-            url = Api.get('/sales/program', {
-                    params: {
-                        id : id
-                    } 
-                })
-        
-        }
-        await url.then(response => {
-            state.datas = response.data.data
-            state.data.id = state.datas[0].id
-            state.data.program=state.datas[0].program
-            state.data.disc=state.datas[0].disc_program
-            state.data.potongan=state.datas[0].potongan_harga
-            state.data.status_progran=state.datas[0].status_progran
-            action.value ='Update'
-            AddModal.value = true
-            loadingsycn.value = false
-            basicModalPreview.value = false
+        state.data.id = data.odata
+        state.data.course=data.course
+        state.data.durasi=data.durasi
+        state.data.tanggal=data.tanggal
+        state.data.teacher=data.teacher
+        state.data.studio=data.studio
+        state.data.desc_course=data.desc_course
+        state.data.status_course=data.status_course
+        action.value ='Update'
+        AddModal.value = true
+        loadingsycn.value = false
+        basicModalPreview.value = false
+    }
 
-        }).catch(error => {
-            console.log(error);
-            if(error.response.data.status_code==403){
-                router.push({name: '403'})
-            }else{
-                const object1 = error.response.data
-                pesan.value =  Object.values(object1).toString()
-                setWarningModalPreview(true)
-            }
-        })
+    const filter_search = (input, option) => {
+        return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     }
 
 
@@ -482,77 +538,47 @@
         const token = localStorage.getItem('token_iss')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
         if (action.value=='Add New') {
-            let url=''
-            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
-                url =  Api.post('/admin/program', {
-                        program : state.data.program,
-                        disc_program : state.data.disc,
-                        potongan_harga : state.data.potongan,
-                        price : state.data.price,
-                        status_progran : state.data.status_progran,
-                    })
-            
-            
-            }else{
-                url = Api.post('/sales/program', {
-                        program : state.data.program,
-                        disc_program : state.data.disc,
-                        potongan_harga : state.data.potongan,
-                        price : state.data.price,
-                        status_progran : state.data.status_progran,
-                    })
-            
-            }
+            await Api.post('/admin/course', {
+                course : state.data.course,
+                durasi : state.data.durasi,
+                tanggal : state.data.tanggal,
+                teacher : state.data.teacher,
+                studio : state.data.studio,
+                desc_course : state.data.desc_course,
+                status_course : state.data.status_course
 
-            await url.then(async (response) => {
-                loadingsycn.value = false
-                basicModalPreview.value = false
-                setSuccessModalPreview(true)
-                pesan.value = "Success Add Packages"
-                AddModal.value = false
-                tampilData()
+            }) .then(async (response) => {
+                    loadingsycn.value = false
+                    tampilData()
+                    setSuccessModalPreview(true)
+                    pesan.value = "Course Sukses Di Tambahkan"
+                    basicModalPreview.value = false
+                    AddModal.value = false
             }).catch(error => {
-
                 const object1 = error.response.data.data
                 pesan.value =  Object.values(object1).toString()
                 setWarningModalPreview(true)
             })
-        } else {
+    
+        }else{
+            await Api.put('/admin/course', {
+                id: state.data.id,
+                course : state.data.course,
+                durasi : state.data.durasi,
+                tanggal : state.data.tanggal,
+                teacher : state.data.teacher,
+                studio : state.data.studio,
+                desc_course : state.data.desc_course,
+                status_course : state.data.status_course
 
-            let url=''
-            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
-                url =  Api.put('/admin/program', {
-                        id : state.data.id,
-                        program : state.data.program,
-                        disc_program : state.data.disc,
-                        potongan_harga : state.data.potongan,
-                        price : state.data.price,
-                        status_progran : state.data.status_progran,
-                    })
-            
-            
-            }else{
-                url = Api.put('/sales/program', {
-                        id : state.data.id,
-                        program : state.data.program,
-                        disc_program : state.data.disc,
-                        potongan_harga : state.data.potongan,
-                        price : state.data.price,
-                        status_progran : state.data.status_progran,
-                    })
-            
-            }
-
-            await url.then(async (response) => {
-            
-                pesan.value = "Success Update Packages"
-                setSuccessModalPreview(true)
-                loadingsycn.value = false
-                basicModalPreview.value = false
-                AddModal.value = false
-                tampilData()
+            }) .then(async (response) => {
+                    loadingsycn.value = false
+                    tampilData()
+                    setSuccessModalPreview(true)
+                    pesan.value = "Course Sukses Di Update"
+                    basicModalPreview.value = false
+                    AddModal.value = false
             }).catch(error => {
-
                 const object1 = error.response.data.data
                 pesan.value =  Object.values(object1).toString()
                 setWarningModalPreview(true)
@@ -561,19 +587,13 @@
 
     }
 
+
+
     onMounted(async() => {
     
         await tampilData()
-    })
-
-
-    watch(show, (newQuestion, oldQuestion) => {
-        tampilData()
-    })
-
-
-    watch(tanggal, (newQuestion, oldQuestion) => {
-        tampilData()
+        await tampilTeacher()
+        await tampilDepartement()
     })
 
 

@@ -539,6 +539,7 @@
     import Lucide from "../base-components/Lucide"
     import Table from "../base-components/Table"
     import Preview from "../base-components/Preview"
+     import { useStore } from "vuex"
     import LoadingIcon from "../base-components/LoadingIcon"
     import { Dialog, Menu } from "../base-components/Headless"
     import {
@@ -549,7 +550,8 @@
     import man from "../assets/images/sabar.png"
     import 'vue-select/dist/vue-select.css';
     import 'vue-multiselect/dist/vue-multiselect.ssr.css'
-
+    const store = useStore()
+    const user = store.getters['auth/currentUser']
     const loading = ref(true)
     const loadingsycn = ref("")
     const pesan = ref("")
@@ -654,8 +656,17 @@
     const tampilData = async (page = 1) => {
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/users?page=' + page+ '&q=' + search.value + '&status=' + status.value+  '&dept=' + dept.value)
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/users?page=' + page+ '&q=' + search.value + '&status=' + status.value+  '&dept=' + dept.value)
+    
+        
+        }else{
+            url = Api.get('/sales/users?page=' + page+ '&q=' + search.value + '&status=' + status.value+  '&dept=' + dept.value)
+    
+        
+        }
+        await url.then(response => {
             state.listData = response.data.data
             loading.value= false
         }).catch(error => {
@@ -676,12 +687,22 @@
         pesan.value="Mohon Tunggu ya, Lagi Ambil Data"
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/users', {
-            params: {
-                id : id
-            } 
-        })
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/users', {
+                    params: {
+                        id : id
+                    } 
+                })
+        }else{
+            url = Api.get('/sales/users', {
+                    params: {
+                        id : id
+                    } 
+                })
+        
+        }
+        await url.then(response => {
             state.datas = response.data.data
             state.data.id = state.datas[0].id
             state.data.name = state.datas[0].name
@@ -714,12 +735,23 @@
         pesan.value="Mohon Tunggu ya, Lagi Ambil Data"
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/team', {
-            params: {
-                id : id
-            } 
-        })
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/team', {
+                    params: {
+                        id : id
+                    } 
+                })
+                
+        }else{
+            url = Api.get('/sales/team', {
+                    params: {
+                        id : id
+                    } 
+                })
+        }
+
+        await url.then(response => {
             state.listTeam = response.data.data
             teamModalPreview.value = true
             loadingsycn.value = false
@@ -743,12 +775,25 @@
     const addgroup = async (id) => {
         pesan.value="Mohon Tunggu ya, Lagi Ambil Data"
         loading.value = true
-        await Api.get('/admin/users', {
-            params: {
-                id : id
-            } 
-        })
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/users', {
+                    params: {
+                        id : id
+                    } 
+                })
+        
+                
+        }else{
+            url = Api.get('/sales/users', {
+                    params: {
+                        id : id
+                    } 
+                })
+        
+        }
+
+        await url.then(response => {
             state.datas = response.data.data
             console.log(state.datas[0].group_studio);
             state.data.id = id
@@ -788,16 +833,35 @@
     const saveData = async () => {
 
         if(action.value=="INSERT"){
-            await Api.post('/admin/users', {
-                name : state.data.name,
-                email : state.data.email,
-                password : state.data.password,
-                kode : kode.value,
-                role : selected.value,
-                status_user : state.data.status_user,
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.post('/admin/users', {
+                        name : state.data.name,
+                        email : state.data.email,
+                        password : state.data.password,
+                        kode : kode.value,
+                        role : selected.value,
+                        status_user : state.data.status_user,
 
-            })
-            .then(async (response) => {
+                    })
+            
+            
+                    
+            }else{
+                url = Api.post('/sales/users', {
+                        name : state.data.name,
+                        email : state.data.email,
+                        password : state.data.password,
+                        kode : kode.value,
+                        role : selected.value,
+                        status_user : state.data.status_user,
+
+                    })
+            
+            
+            }
+
+            await url.then(async (response) => {
                 await tampilData()
                 setSuccessModalPreview(true)
                 pesan.value = "Data Success Added"
@@ -809,15 +873,35 @@
                 setWarningModalPreview(true)
             })
         }else{
-            await Api.put('/admin/users', {
-                id :  state.data.id,
-                name : state.data.name,
-                email : state.data.email,
-                password : state.data.password,
-                kode : kode.value,
-                role : selected.value,
-                status_user : state.data.status_user,
-            }).then(async (response) => {
+
+            let url=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                url = Api.put('/admin/users', {
+                        id :  state.data.id,
+                        name : state.data.name,
+                        email : state.data.email,
+                        password : state.data.password,
+                        kode : kode.value,
+                        role : selected.value,
+                        status_user : state.data.status_user,
+                    })
+            
+            
+                    
+            }else{
+                url = Api.put('/sales/users', {
+                        id :  state.data.id,
+                        name : state.data.name,
+                        email : state.data.email,
+                        password : state.data.password,
+                        kode : kode.value,
+                        role : selected.value,
+                        status_user : state.data.status_user,
+                    })
+            }
+
+
+            await url.then(async (response) => {
 
                 await tampilData()
 
@@ -839,8 +923,15 @@
     const tampilRole = async () => {
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/role')
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get('/admin/role')
+                
+        }else{
+            url =Api.get('/sales/role')
+        
+        }
+        await url.then(response => {
             console.log( response.data.data);
             state.listRole = response.data.data
         }).catch(error => {
@@ -856,19 +947,45 @@
     }
 
     const saveSales = async () => {
-
-        await Api.post('/admin/team', {
-            sales : sales.value,
-            id : state.data.idleader
-
-        }) .then(async (response) => {
-        
-            await Api.get('/admin/team', {
-                params: {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url =  Api.post('/admin/team', {
+                    sales : sales.value,
                     id : state.data.idleader
-                } 
-            })
-            .then(response => {
+
+                }) 
+                
+        }else{
+            url = Api.post('/sales/team', {
+                    sales : sales.value,
+                    id : state.data.idleader
+
+                }) 
+        
+        }
+
+        await url.then(async (response) => {
+
+            let urls=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                urls = Api.get('/admin/team', {
+                        params: {
+                            id : state.data.idleader
+                        } 
+                    })
+            
+                    
+            }else{
+                urls = Api.get('/sales/team', {
+                        params: {
+                            id : state.data.idleader
+                        } 
+                    })
+            
+            
+            }
+        
+            await urls.then(response => {
                 state.listTeam = response.data.data
                 SalesModalPreview.value = false
                 loadingsycn.value = false
@@ -898,17 +1015,40 @@
 
     const hapusTeam = async (id) => {
 
-        await Api.put('/admin/team', {
-            id : id
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url =  Api.put('/admin/team', {
+                        id : id
+                    })
+                
+        }else{
+            url = Api.put('/sales/team', {
+                    id : id
 
-        }).then(async (response) => {
+                })
+        
+        }
 
-            await Api.get('/admin/team', {
-                params: {
-                    id : state.data.idleader
-                } 
-            })
-            .then(response => {
+        await url.then(async (response) => {
+
+            let urls=''
+            if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+                urls =  Api.get('/admin/team', {
+                        params: {
+                            id : state.data.idleader
+                        } 
+                    })
+            
+                    
+            }else{
+                urls = Api.get('/sales/team', {
+                            params: {
+                                id : state.data.idleader
+                            } 
+                        })
+            }
+
+            await urls.then(response => {
                 state.listTeam = response.data.data
                 SalesModalPreview.value = false
                 loadingsycn.value = false
@@ -940,8 +1080,17 @@
     const tampilSales = async () => {
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/team')
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url =  Api.get('/admin/team')
+        
+                
+        }else{
+            url = Api.get('/sales/team')
+        
+        
+        }
+        await url.then(response => {
             state.listSales = response.data.data
         }).catch(error => {
             
@@ -959,8 +1108,13 @@
     const tampilDepartement = async () => {
         const token = localStorage.getItem('token_yogafit')
         Api.defaults.headers.common['Authorization'] = "Bearer " +token
-        await Api.get('/admin/department')
-        .then(response => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url =  Api.get('/admin/department')
+        }else{
+            url = Api.get('/sales/department')
+        }
+        await url.then(response => {
             state.listDepartement = response.data.data
         }).catch(error => {
             
@@ -981,11 +1135,21 @@
 
     const saveTukerSales = async () => {
 
-        await Api.post('/admin/tuker_sales', {
-            sales : sales.value,
-            saleslama : saleslama.value
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.post('/admin/tuker_sales', {
+                    sales : sales.value,
+                    saleslama : saleslama.value
+                }) 
+        }else{
+            url = Api.post('/sales/tuker_sales', {
+                    sales : sales.value,
+                    saleslama : saleslama.value
 
-        }) .then(async (response) => {
+                }) 
+        }
+
+        await url.then(async (response) => {
 
     
                 setSuccessModalPreview(true)
@@ -1001,11 +1165,21 @@
     }
 
     const saveGroup = async () => {
-        await Api.put('/admin/usersGroup', {
-            id : state.data.id,
-            kode : kodegroup.value
-        })
-        .then(async (response) => {
+        let url=''
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url =  Api.put('/admin/usersGroup', {
+                    id : state.data.id,
+                    kode : kodegroup.value
+                })
+        
+        }else{
+            url = Api.put('/sales/usersGroup', {
+                    id : state.data.id,
+                    kode : kodegroup.value
+                })
+        
+        }
+        await url.then(async (response) => {
             await tampilData()
             setSuccessModalPreview(true)
             pesan.value = "Group Success Added"
