@@ -277,6 +277,12 @@ export const useSideMenuStore = defineStore("sideMenu", {
           },
           {
             icon: "List",
+            pageName: "BR",
+            title: "Master BR",
+            roles : ["superAdmin","admin","salesManager"],
+          },
+          {
+            icon: "List",
             pageName: "kat_pembayaran",
             title: "Kategori Pembayaran",
             roles : ["superAdmin","admin"],

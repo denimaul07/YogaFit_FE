@@ -1,6 +1,6 @@
 <template>
     <div v-if="loadingsycn==true">
-        <Dialog :open="basicModalPreview" @close="setBasicModalPreview(false);">
+        <Dialog :open="basicModalPreview">
             <div class="fixed inset-0 flex items-center justify-center p-4">
                 <Dialog.Panel>
                     <div class="p-5 text-center pt-10">
@@ -19,25 +19,7 @@
         </Dialog>
     </div>
 
-    <div v-if="loading==true">
-        <Dialog :open="basicModalPreview" @close="setBasicModalPreview(false);">
-            <div class="fixed inset-0 flex items-center justify-center p-4">
-                <Dialog.Panel>
-                    <div class="p-5 text-center pt-10">
-                        <br><br>
-                        <div class="flex flex-col items-center justify-end col-span-12">
-                            <img
-                                alt="Midone Tailwind HTML Admin Template"
-                                class="w-1/2 -mt-16 -intro-x"
-                                :src="man"
-                                />
-                            <div class="mt-2 text-1xl text-center">Mohon Tunggu Ya, Lagi Proses Ambil Data :)</div>
-                        </div>
-                    </div>
-                </Dialog.Panel>
-            </div>
-        </Dialog>
-    </div>
+
 
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="col-span-12 2xl:col-span-4">
@@ -122,6 +104,9 @@
                                             Image
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Members List
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                             Status
                                         </Table.Th>
                                         <Table.Th class="border-b-0 whitespace-nowrap text-center">
@@ -167,7 +152,17 @@
                                                 :src="'https://login.yogafitidonline.com/api/storage/event/'+data.gambar"
                                             />
                                         </Table.Td>
-                                    
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            <div class="flex items-center justify-center">
+                                                <a class="flex items-center text-success" href="#" @click="listMember(data.odata)">
+                                                    Members List
+                                                </a>
+
+                                                <a class="flex items-center text-success" href="#" @click="listPresent(data.odata)">
+                                                    Members Present
+                                                </a>
+                                            </div>
+                                        </Table.Td>
                                         <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
                                             <div
                                                 :class="[
@@ -328,6 +323,311 @@
         
     </Dialog>
 
+    <a-modal v-model:open="AddModalMember" title="event Members" :footer="false"     width="1000px">
+        <div class="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">       
+            <div class="items-center sm:flex sm:mr-4">
+                <Button variant="primary" class="mr-2 shadow-md" @click="addNewMember" v-if="actionPresent!=='present'">
+                    <span class="flex items-center justify-center w-40 h-5">
+                        <Lucide icon="Plus" class="w-4 h-4" /> Add Members
+                    </span>
+                </Button>
+
+            </div>
+
+            <div class="hidden mx-auto md:block text-black">
+            
+            </div>
+
+            <div class="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+                <div class="relative w-56 text-slate-500">
+                    <FormInput
+                    type="text"
+                    class="w-56 pr-10 !box"
+                    placeholder="Search..."
+                    v-model="searchevent"
+                    />
+                    <Lucide
+                    icon="Search"
+                    class="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
+                    />
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-span-12 sm:col-span-12 xl:col-span-12 pt-5  intro-y">
+            <div class="col-span-12 2xl:col-span-3">
+                <div class="overflow-x-auto">
+                    <Table>
+                        <Table.Thead  class="bg-primary text-white">
+                            <Table.Tr class="intro-x">
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    No
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Member Name
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Studio
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    No Telp
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Gender
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Sales
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Status
+                                </Table.Th>
+                                <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                    Action
+                                </Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                    
+                            <Table.Tr v-if="loading" class="intro-x">
+                                <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                    <div class="flex flex-col items-center justify-end col-span-12">
+                                        <LoadingIcon icon="audio" class="w-8 h-8" />
+                                        <div class="mt-2 text-xs text-center">Processing Data</div>
+                                    </div>
+                                </Table.Td>
+                            </Table.Tr>
+
+                            <Table.Tr v-else-if="state.listEvent.total === 0" class="intro-x">
+                                <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                    <div class="flex flex-col items-center justify-end col-span-12">
+                                        <div class="mt-2 text-xs text-center">No Data</div>
+                                    </div>
+                                </Table.Td>
+                            </Table.Tr>
+
+                            <Table.Tr class="intro-x" v-for="(data, index) in state.listEvent.data" :key="data.id" v-else>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                    <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
+                                        {{ state.listEvent.from + index }}
+                                    </div>
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                    {{ data.name }}
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                    {{ data.deptname }}
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                    {{ data.no_telp }}
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                    {{ data.gender }}
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                    {{ data.namasales }}
+                                </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
+                                        <div
+                                            :class="[
+                                            'flex items-center justify-center',
+                                                { 'text-danger': data.status==0 },
+                                                { 'text-success': data.status==1 }
+                                            ]"
+                                        >
+                                            <!-- <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" /> -->
+                                            <div v-if="data.status==0">Absen</div>
+                                            <div v-else-if="data.status==1">Present</div>
+                                        
+                                        </div>
+                                    </Table.Td>
+                                <Table.Td class="first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                                    <div class="flex items-center justify-center" v-if="data.status==0">
+                                        <a-popconfirm
+                                            title="Are you sure add list Member?"
+                                            ok-text="Yes"
+                                            cancel-text="No"
+                                            @confirm="present(data)"
+                                            @cancel="cancel"
+                                        >
+                                            <a class="flex items-center text-success" href="#">
+                                                <Lucide icon="Check" class="w-4 h-4 mr-1" /> 
+                                            </a>
+                                        </a-popconfirm>
+                                    </div>
+                                </Table.Td>
+
+                            </Table.Tr>
+                        </Table.Tbody>
+                    </Table>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">  
+                <div class="items-center sm:flex sm:mr-4">
+                    <TailwindPagination :limit="1" :data="state.listEvent" @pagination-change-page="tampilEvent"/>
+                </div>
+
+                <div class="hidden mx-auto md:block text-slate-500">
+                    Showing {{ state.listEvent.from }} to {{ state.listEvent.to }} of {{ state.listEvent.total }} entries
+                </div>
+
+                <div class="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+                    <div class="relative w-56 text-slate-500">
+                        <FormInput
+                        type="text"
+                        class="w-56 pr-10 !box"
+                        placeholder="Search..."
+                        v-model="searchevent"
+                        />
+                        <Lucide
+                        icon="Search"
+                        class="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a-modal v-model:open="modalMember" title="List Data Members" :footer="false"     width="1000px">
+                <div class="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">       
+                    <div class="items-center sm:flex sm:mr-4">
+                    
+
+                    </div>
+
+                    <div class="hidden mx-auto md:block text-black">
+                    
+                    </div>
+
+                    <div class="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+                        <div class="relative w-56 text-slate-500">
+                            <FormInput
+                            type="text"
+                            class="w-56 pr-10 !box"
+                            placeholder="Search..."
+                            v-model="searchMember"
+                            />
+                            <Lucide
+                            icon="Search"
+                            class="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
+                            />
+                        </div>
+                        
+                    </div>
+                </div>
+            
+                <div class="col-span-12 sm:col-span-12 xl:col-span-12  intro-y">
+                    <div class="col-span-12 2xl:col-span-3">
+                        <div class="overflow-x-auto">
+                            <Table>
+                                <Table.Thead  class="bg-primary text-white">
+                                    <Table.Tr class="intro-x">
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            No
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Member Name
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Studio
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            No Telp
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Gender
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Sales
+                                        </Table.Th>
+                                        <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            Action
+                                        </Table.Th>
+                                    </Table.Tr>
+                                </Table.Thead>
+                                <Table.Tbody>
+
+                                    <Table.Tr v-if="loadingMember" class="intro-x">
+                                        <Table.Td colspan="11" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                            <div class="flex flex-col items-center justify-end col-span-12">
+                                                <LoadingIcon icon="audio" class="w-8 h-8" />
+                                                <div class="mt-2 text-xs text-center">Processing Data</div>
+                                            </div>
+                                        </Table.Td>
+                                    </Table.Tr>
+
+                                    <Table.Tr class="intro-x" v-for="(data, index) in state.listMember.data" :key="data.id" v-else>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                            <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
+                                                {{ state.listMember.from + index }}
+                                            </div>
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.name }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.departments.deptname }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.no_telp }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.gender }}
+                                        </Table.Td>
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
+                                            {{ data.namasales }}
+                                        </Table.Td>
+                            
+                                        <Table.Td class="first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                                            <div class="flex items-center justify-center">
+                                                <a-popconfirm
+                                                    title="Are you sure add list Member?"
+                                                    ok-text="Yes"
+                                                    cancel-text="No"
+                                                    @confirm="confirm(data.id)"
+                                                    @cancel="cancel"
+                                                >
+                                                    <a class="flex items-center text-success" href="#">
+                                                        <Lucide icon="Check" class="w-4 h-4 mr-1" /> 
+                                                    </a>
+                                                </a-popconfirm>
+                                            </div>
+                                        </Table.Td>
+                                    </Table.Tr>
+                                </Table.Tbody>
+                            </Table>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">  
+                        <div class="items-center sm:flex sm:mr-4">
+                            <TailwindPagination :limit="1" :data="state.listMember" @pagination-change-page="tampilMember"/>
+                        </div>
+
+                        <div class="hidden mx-auto md:block text-slate-500">
+                            Showing {{ state.listMember.from }} to {{ state.listMember.to }} of {{ state.listMember.total }} entries
+                        </div>
+
+                        <div class="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+                            <div class="relative w-56 text-slate-500">
+                                <FormInput
+                                type="text"
+                                class="w-56 pr-10 !box"
+                                placeholder="Search..."
+                                v-model="searchMember"
+                                />
+                                <Lucide
+                                icon="Search"
+                                class="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </a-modal>
+    </a-modal>
+
     
 </template>
 
@@ -352,6 +652,7 @@
         DialogPanel
 
     } from '@headlessui/vue'
+    import { message } from 'ant-design-vue';
     import { ClassicEditor } from "../base-components/Ckeditor";
     import man from "../assets/images/sabar.png"
     import { useDebounceFn } from '@vueuse/core'
@@ -392,10 +693,15 @@
     const search = ref("")
     const image = ref("")
     const pesan = ref("")
+    const searchevent=ref("")
     const action = ref("Add New")
+    const AddModalMember=ref(false)
+    const modalMember=ref(false)
     const state = reactive(
         {
             listData:{},
+            listMember:{},
+            listEvent:{},
             data:{
                 id:"",
                 event:"",
@@ -530,12 +836,140 @@
 
     }
 
+    const listMember = async (id) => {
+        loadingsycn.value = true
+        basicModalPreview.value = true
+        pesan.value="Please Wait, Process Get Data"
+        state.data.id = id
+        await tampilEvent()
+        AddModalMember.value = true
+        loadingsycn.value = false
+        basicModalPreview.value = false
+    }
+
+    const actionPresent=ref("")
+    const listPresent = async (id) => {
+        loadingsycn.value = true
+        basicModalPreview.value = true
+        pesan.value="Please Wait, Process Get Data"
+        state.data.id = id
+        actionPresent.value = "present"
+        await tampilEvent()
+        AddModalMember.value = true
+        loadingsycn.value = false
+        basicModalPreview.value = false
+    }
+
+    const tampilEvent= async (page = state.listEvent.current_page) => {
+        loading.value = true
+        await Api.get('/admin/event_member?page=' + page+ '&q=' + search.value+'&id=' + state.data.id+'&action=' + actionPresent.value)
+        .then(response => {
+            state.listEvent = response.data.data
+            loading.value = false
+        }).catch(error => {
+            if(error.response.data.status_code==403){
+                router.push({name: '403'})
+            }else{
+                const object1 = error.response.data
+                pesan.value =  Object.values(object1).toString()
+                setWarningModalPreview(true)
+            }
+        })
+    }
+
+    const addNewMember= () => {
+        modalMember.value=true
+    }
+
+    const cancel = e => {
+        console.log(e);
+    };
+
+    const confirm = async(id) => {
+        loadingsycn.value = true
+        basicModalPreview.value = true
+        pesan.value="Please Wait, Process Save Data"
+    
+        await Api.post('/admin/event_member', {
+            id : state.data.id,
+            id_user : id,
+
+        }) .then(async (response) => {
+                loadingsycn.value = false
+                await tampilEvent()
+                await tampilData()
+                message.success('Member Sukses Di Tambahkan');
+                AddModal.value = false
+        }).catch(error => {
+            console.log(error);
+            
+            const object1 = error.response.data.data
+            pesan.value =  Object.values(object1).toString()
+            setWarningModalPreview(true)
+        })
+    
+    
+        modalMember.value=false
+        
+    };
+
+    const present = async(data) => {
+        await Api.post('/admin/present_event_member', {
+            id : data.odata,
+            id_user : data.id_member,
+            event : data.event
+        }) .then(async (response) => {
+                await tampilEvent()
+                message.success('Success Change Member Present');
+        }).catch(error => {
+            const object1 = error.response.data.data
+            pesan.value =  Object.values(object1).toString()
+            setWarningModalPreview(true)
+        })
+    
+    
+        modalMember.value=false
+        
+    };
+
+    const searchMember=ref("")
+    const loadingMember=ref(false)
+    const tampilMember= async (page = state.listMember.current_page) => {
+        loadingMember.value=true
+        await Api.get('/admin/get_member_active?page=' + page+ '&q=' + searchMember.value)
+        .then((response) => {
+            state.listMember = response.data.data;
+            loadingMember.value = false;
+        })
+        .catch((error) => {
+            if (error.response.data.status_code == 403) {
+                router.push({ name: "403" });
+            } else {
+                const object1 = error.response.data.data;
+                pesan.value = Object.values(object1).toString();
+                setWarningModalPreview(true);
+            }
+        });
+
+    };
+
 
 
     onMounted(async() => {
-    
-        await tampilData()
+        await Promise.all([
+            tampilData(),
+            tampilMember()
+        ]);
     })
+
+    watch(searchMember, (newQuestion, oldQuestion) => {
+        searchingMember()
+    })
+
+    const searchingMember = useDebounceFn(() => {
+        loading.value= false
+        tampilMember()
+    }, 500)
 
 
     watch(search, (newQuestion, oldQuestion) => {

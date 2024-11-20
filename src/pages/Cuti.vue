@@ -126,7 +126,7 @@
                                 </Table.Thead>
                                 <Table.Tbody>
                                     <Table.Tr v-if="loading" class="intro-x">
-                                        <Table.Td colspan="10" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                        <Table.Td colspan="15" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                                             <div class="flex flex-col items-center justify-end col-span-12">
                                                 <LoadingIcon icon="audio" class="w-8 h-8" />
                                                 <div class="mt-2 text-xs text-center">Processing Data</div>
@@ -134,7 +134,7 @@
                                         </Table.Td>
                                     </Table.Tr>
                                     <Table.Tr v-if="state.listData.total==0" class="intro-x">
-                                        <Table.Td colspan="10" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]" >
+                                        <Table.Td colspan="15" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]" >
                                             <div class="flex flex-col items-center justify-end col-span-12">
                                                 <div class="mt-2 text-xs text-center">Data Not Found</div>
                                             </div>

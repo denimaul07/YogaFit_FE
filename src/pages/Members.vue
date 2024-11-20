@@ -159,8 +159,11 @@
                                 <Table>
                                     <Table.Thead  class="bg-primary text-white">
                                         <Table.Tr class="intro-x">
-                                            <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                            <Table.Th class="border-b-0 whitespace-nowrap text-center sticky-column">
                                                 NO
+                                            </Table.Th>
+                                            <Table.Th class="border-b-0 whitespace-nowrap text-center sticky-column1">
+                                                STATUS
                                             </Table.Th>
                                             <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                                 NAME
@@ -186,10 +189,8 @@
                                             <Table.Th class="border-b-0 whitespace-nowrap text-center">
                                                 REFERAL CODE
                                             </Table.Th>
-                                            <Table.Th class="border-b-0 whitespace-nowrap text-center">
-                                                STATUS
-                                            </Table.Th>
-                                            <Table.Th class="border-b-0 whitespace-nowrap text-center">
+                                        
+                                            <Table.Th class="border-b-0 whitespace-nowrap text-center sticky-columnAction">
                                                 ACTION
                                             </Table.Th>
                                         </Table.Tr>
@@ -211,9 +212,29 @@
                                             </Table.Td>
                                         </Table.Tr>
                                         <Table.Tr class="intro-x" v-for="(data, index) in state.listData.data" :key="data.id" v-else>
-                                            <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                            <Table.Td class="sticky-column first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                                                 <div class="px-2 py-1 text-xs font-medium rounded-full bg-white text-center">
                                                     {{ state.listData.from + index }}
+                                                </div>
+                                            </Table.Td>
+
+                                            <Table.Td class="sticky-column1 first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
+                                                <div
+                                                    :class="[
+                                                    'flex items-center justify-center',
+                                                        { 'text-success': data.status_users==0 },
+                                                        { 'text-danger': data.status_users==1 },
+                                                        { 'text-warning': data.status_users==2 },
+                                                        { 'text-yellow-300': data.status_users==3 },
+                                                        { 'text-orange-400': data.status_users==4 }
+                                                    ]"
+                                                >
+                                                    <!-- <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" /> -->
+                                                    <div v-if="data.status_users==0">Active</div>
+                                                    <div v-else-if="data.status_users==1">Non Active</div>
+                                                    <div v-else-if="data.status_users==2">Request Cuti</div>
+                                                    <div v-else-if="data.status_users==3">Cuti</div>
+                                                    <div v-else-if="data.status_users==4">Trial</div>
                                                 </div>
                                             </Table.Td>
                                             <Table.Td class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
@@ -249,27 +270,9 @@
                                             <Table.Td class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-center">
                                                 {{ data.referal_code }}
                                             </Table.Td>
-                                            <Table.Td class="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] whitespace-nowrap">
-                                                <div
-                                                    :class="[
-                                                    'flex items-center justify-center',
-                                                        { 'text-success': data.status_users==0 },
-                                                        { 'text-danger': data.status_users==1 },
-                                                        { 'text-warning': data.status_users==2 },
-                                                        { 'text-yellow-300': data.status_users==3 },
-                                                        { 'text-orange-400': data.status_users==4 }
-                                                    ]"
-                                                >
-                                                    <!-- <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" /> -->
-                                                    <div v-if="data.status_users==0">Active</div>
-                                                    <div v-else-if="data.status_users==1">Non Active</div>
-                                                    <div v-else-if="data.status_users==2">Request Cuti</div>
-                                                    <div v-else-if="data.status_users==3">Cuti</div>
-                                                    <div v-else-if="data.status_users==4">Trial</div>
-                                                </div>
-                                            </Table.Td>
+                                        
                                 
-                                            <Table.Td class="first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                                            <Table.Td class="sticky-columnAction first:rounded-l-md last:rounded-r-md w-56 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                                                 <div class="flex items-center justify-center">
                                                     <Tippy as="div"  content="View Detail Member">
                                                         <a class="flex items-center text-success" href="#" @click="edit(data.id)">
@@ -650,7 +653,7 @@
                                                             <Table.Th class="whitespace-nowrap"> Payment Type</Table.Th>
                                                             <Table.Th class="whitespace-nowrap"> Type Contract</Table.Th>
                                                             <Table.Th class="whitespace-nowrap"> Status Contract</Table.Th>
-                                                            <Table.Th class="whitespace-nowrap sticky-columnAction"> Action</Table.Th>
+                                                            <Table.Th class="whitespace-nowrap text-center sticky-columnAction"> Action</Table.Th>
 
                                                         </Table.Tr>
                                                     </Table.Thead>
@@ -697,11 +700,7 @@
                                                                         </a>
                                                                     </Tippy>
 
-                                                                    <Tippy as="div"  content="Kirim Login Akun">
-                                                                        <a class="flex items-center mr-3 text-info" href="#" @click="kirimlogin(data.id_member)">
-                                                                            <Lucide icon="Send" class="w-4 h-4 mr-1" />
-                                                                        </a>
-                                                                    </Tippy>
+                                                                
 
                                                                     <Tippy as="div" content="Renewal Contract" v-if="data.status_contract != 4">
                                                                         <a class="flex items-center mr-3 text-emerald-500 ml-3" href="#" @click="renewalContract(data.idcontract)">
@@ -719,6 +718,12 @@
                                                                     <Tippy as="div"  content="View Payment" >
                                                                         <a class="flex items-center mr-3 text-cyan-700 ml-3" href="#" @click="viewPembayaran(data.idcontract)">
                                                                             <Lucide icon="CreditCard" class="w-4 h-4 mr-1" />
+                                                                        </a>
+                                                                    </Tippy>
+
+                                                                    <Tippy as="div"  content="Kirim Login Akun">
+                                                                        <a class="flex items-center mr-3 text-info" href="#" @click="kirimlogin(data.id_member)">
+                                                                            <Lucide icon="Send" class="w-4 h-4 mr-1" />
                                                                         </a>
                                                                     </Tippy>
                                                                     
@@ -1385,6 +1390,45 @@
                                                                                     />
                                                                                 </Table.Td>
                                                                             </Table.Tr>
+
+                                                                            <Table.Tr  class="intro-x">
+                                                                                <Table.Td colspan="9" class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-right">
+                                                                                    Buddy Referral
+                                                                                </Table.Td>
+
+                                                                                <Table.Td class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-left">
+                                                                                    <a-select style="width:150px" v-model:value="typeBR" @change="selectBR"  placeholder="Select Disc Type">
+                                                                                        <a-select-option value="">Select Buddy Referral</a-select-option>
+                                                                                        <a-select-option value="1" label="Yes">Yes</a-select-option>
+                                                                                        <a-select-option value="0" label="No">No</a-select-option>
+                                                                                    </a-select>
+                                                                                </Table.Td>
+                                                                            </Table.Tr>
+
+                                                                            <Table.Tr  class="intro-x">
+                                                                                <Table.Td colspan="9" class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-right">
+                                                                                    Disc BR %
+                                                                                </Table.Td>
+
+                                                                                <Table.Td class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-left">
+                                                                                    <a-input :loading="loading" style="width:150px;border-radius:7px;border-color: rgb(217 217 217);padding: 4px 9px;" v-model:value="state.data.discBR" readonly />
+                                                                                </Table.Td>
+                                                                            </Table.Tr>
+
+                                                                            <Table.Tr  class="intro-x">
+                                                                                <Table.Td colspan="9" class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-right">
+                                                                                    Final Price
+                                                                                </Table.Td>
+
+                                                                                <Table.Td class="whitespace-nowrap first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]  text-left">
+                                                                                    <a-input-number style="width:150px" :loading="loading"
+                                                                                        v-model:value="finalprice"
+                                                                                        :formatter="value => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                                                                        :parser="value => value.replace(/\Rp\s?|(,*)/g, '')" readonly
+                                                                                    />
+                                                                                </Table.Td>
+                                                                            </Table.Tr>
+
                                                                         </Table.Tbody>
                                                                     </Table>
                                                                 </div>
@@ -2420,7 +2464,7 @@
     const program = ref("");
     const typeDisc = ref("");
     const extraDisc = ref(0);
-    const pricesession = ref(0)
+    const typeBR = ref("")
     const totprice = ref(0)
     const extraPotongan = ref(0);
     const statusPT = ref("");
@@ -2430,7 +2474,7 @@
     const status=ref("");
     const searchbayar=ref("")
     const tanggalbayar=ref(moment().format('YYYY-MM-DD') + ' - ' +moment().format('YYYY-MM-DD'))
-    const totpricenew=ref(0)
+    const finalprice=ref(0)
     const amountnew=ref(0)
     const signature1 = ref(null)
     const videoElement = ref(null);
@@ -2653,6 +2697,7 @@
             status_user:"",
             contrack_no:"",
             idcontract:"",
+            discBR:"",
             type_contract:"",
             teacher:"",
             relation_name: "",
@@ -3061,6 +3106,43 @@
         }
     }
 
+    const selectBR = async (value) => {
+        let url=''
+        loading.value=true
+        if (user.roles[0].name=='superAdmin' || user.roles[0].name=='admin') {
+            url = Api.get("/admin/master_br")
+        }else{
+            url = Api.get("/sales/master_br")
+        }
+
+        url.then((response) => {
+            if(!value){
+                state.data.discBR = 0
+                finalprice.value = state.data.totprice
+            }else if (value==0) {
+                state.data.discBR = 0
+                finalprice.value = state.data.totprice
+            }else{
+                state.data.discBR = parseInt(response.data.data[0].disc)
+                finalprice.value = parseInt(state.data.totprice) * (1 - state.data.discBR / 100) * 1
+            }
+
+            loading.value = false
+        
+            }).catch((error) => {
+        
+            if (error.response.data.status_code == 403) {
+                router.push({ name: "403" });
+            } else {
+                const object1 = error.response.data.data;
+                pesan.value = Object.values(object1).toString();
+                setWarningModalPreview(true);
+            }
+        });
+    
+
+    }
+
     const editContract = async (id) => {
         actionContract.value='Update'
         loadingsycn.value = true
@@ -3160,7 +3242,8 @@
             studio.value=  state.datas[0].id_studio.toString();
             state.data.desc =  state.datas[0].desc;
             typeDisc.value = state.datas[0].disc_type
-            console.log(state.datas[0].extra_disc );
+            typeBR.value = state.datas[0].type_br.toString()
+            state.data.discBR=state.datas[0].disc_br
             
             if (typeDisc.value==0) {
                 state.data.totprice = fee.value * (1 - state.datas[0].extra_disc / 100) * 1
@@ -3171,6 +3254,14 @@
                 state.data.totprice = fee.value - state.datas[0].extra_disc 
                 state.data.extraDisc =  (1 * state.datas[0].extra_disc )
             }
+
+            if (typeBR.value==0) {
+                state.data.discBR = 0
+                finalprice.value = state.data.totprice
+            }else{
+                state.data.discBR = parseInt(state.datas[0].disc_br)
+                finalprice.value = parseInt(state.data.totprice) * (1 - state.datas[0].disc_br  / 100) * 1
+            }   
     
             state.data.referalcode =  state.datas[0].referral_code;
             state.data.status_contract =  state.datas[0].status_contract.toString();
@@ -3233,6 +3324,9 @@
             state.data.contrack_no = state.datas[0].contrack_no
             state.data.type_member = state.datas[0].bundling
             state.data.nama_sales = state.datas[0].sales
+            state.data.emergency_pc=state.datas[0].emergency_pc
+            typeBR.value = state.datas[0].type_br.toString()
+            state.data.discBR=state.datas[0].disc_br
             state.data.emergency_pc=state.datas[0].emergency_pc
             state.data.emergency_relation=state.datas[0].emergency_relation
             state.data.emergency_number=state.datas[0].emergency_number
@@ -3302,6 +3396,14 @@
             }else if(typeDisc.value==1) {
                 state.data.totprice = fee.value - state.datas[0].extra_disc 
                 state.data.extraDisc =  (1 * state.datas[0].extra_disc )
+            }
+
+            if (typeBR.value==0) {
+                state.data.discBR = 0
+                finalprice.value = state.data.totprice
+            }else{
+                state.data.discBR = parseInt(state.datas[0].disc_br)
+                finalprice.value = parseInt(state.data.totprice) * (1 - state.datas[0].disc_br  / 100) * 1
             }
     
             state.data.referalcode =  state.datas[0].referral_code;
@@ -3781,10 +3883,12 @@
             formdata.append("item", JSON.stringify(courses.value));
             formdata.append("type_member", state.data.type_member);
             formdata.append("extra_disc", state.data.extraDisc);
-            formdata.append("total_price", state.data.totprice);
+            formdata.append("total_price", finalprice.value);
             formdata.append('id_program', result[0]);
             formdata.append("disc", disc.value);
             formdata.append("disc_type", typeDisc.value);
+            formdata.append("discbr", state.data.discBR);
+            formdata.append("typebr", typeBR.value);
             formdata.append("amount_paid", amount.value);
             formdata.append("payment_type", state.data.payment_type);
             formdata.append("payment_method", state.data.payment_method);
@@ -3842,10 +3946,12 @@
             formdata.append("item", JSON.stringify(courses.value));
             formdata.append("type_member", state.data.type_member);
             formdata.append("extra_disc", state.data.extraDisc);
-            formdata.append("total_price", state.data.totprice);
+            formdata.append("total_price", finalprice.value);
             formdata.append('id_program', result[0]);
             formdata.append("disc", disc.value);
             formdata.append("disc_type", typeDisc.value);
+            formdata.append("discbr", state.data.discBR);
+            formdata.append("typebr", typeBR.value);
             formdata.append("amount_paid", amount.value);
             formdata.append("payment_type", state.data.payment_type);
             formdata.append("payment_method", state.data.payment_method);
@@ -4632,10 +4738,12 @@
         formdata.append("item", JSON.stringify(courses.value));
         formdata.append("type_member", state.data.type_member);
         formdata.append("extra_disc", state.data.extraDisc);
-        formdata.append("total_price", state.data.totprice);
+        formdata.append("total_price", finalprice.value);
         formdata.append('id_program', result[0]);
         formdata.append("disc", disc.value);
         formdata.append("disc_type", typeDisc.value);
+        formdata.append("discbr", state.data.discBR);
+        formdata.append("typebr", typeBR.value);
         formdata.append("amount_paid", amount.value);
         formdata.append("payment_type", state.data.payment_type);
         formdata.append("payment_method", state.data.payment_method);
@@ -4708,10 +4816,12 @@
         formdata.append("item", JSON.stringify(courses.value));
         formdata.append("type_member", state.data.type_member);
         formdata.append("extra_disc", state.data.extraDisc);
-        formdata.append("total_price", state.data.totprice);
+        formdata.append("total_price", finalprice.value);
         formdata.append('id_program', result[0]);
         formdata.append("disc", disc.value);
         formdata.append("disc_type", typeDisc.value);
+        formdata.append("discbr", state.data.discBR);
+        formdata.append("typebr", typeBR.value);
         formdata.append("amount_paid", amount.value);
         formdata.append("payment_type", state.data.payment_type);
         formdata.append("payment_method", state.data.payment_method);
@@ -4906,7 +5016,7 @@
         BayarModal.value = false
         if(action=='new'){
             amount.value =id
-            balance.value = parseInt(state.data.totprice) - parseInt(amount.value)
+            balance.value = parseInt(finalprice.value) - parseInt(amount.value)
             if(balance.value==amount.value){
                 state.data.payment_type='Full Payment'
             }else{
@@ -4914,6 +5024,7 @@
             }   
         }else if(action=='pelunasan'){
             amount_paid.value =id
+            balance.value = parseInt(finalprice.value) - parseInt(amount.value)
             if(balance.value==amount_paid.value ){
                 state.data.payment_type='Full Payment'
             }else{
@@ -4921,6 +5032,7 @@
             }   
         }else{
             amountnew.value =id
+            balance.value = parseInt(finalprice.value) - parseInt(amount.value)
             if(balance.value==amountnew.value ){
                 state.data.payment_type='Full Payment'
             }else{
@@ -5667,7 +5779,7 @@
 
 
 <style scoped>
-     .sticky-column {
+    .sticky-column {
         position: sticky;
         left: 0;
         z-index: 1;

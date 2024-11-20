@@ -52,6 +52,7 @@ import Workshop from "../pages/Workshop.vue";
 import Event from "../pages/Event.vue";
 import Faq from "../pages/Faq.vue";
 import Instructor from "../pages/Instructor.vue";
+import BR from "../pages/MasterBR.vue";
 const routes = [
   {
     path: "/",
@@ -242,6 +243,15 @@ const routes = [
         path: "/packages",
         name: "packages",
         component: packages, 
+        meta: {
+          requiresAuth: true
+        },
+      },
+
+      {
+        path: "/BR",
+        name: "BR",
+        component: BR, 
         meta: {
           requiresAuth: true
         },

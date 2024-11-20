@@ -313,7 +313,15 @@
                                 </Table.Tr>
                             </Table.Thead>
                             <Table.Tbody>
-                                <Table.Tr v-if="listAchiev.total===0" class="intro-x">
+                                <Table.Tr v-if="loading" class="intro-x">
+                                    <Table.Td colspan="8" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                        <div class="flex flex-col items-center justify-end col-span-12">
+                                            <LoadingIcon icon="audio" class="w-8 h-8" />
+                                            <div class="mt-2 text-xs text-center">Processing Data</div>
+                                        </div>
+                                    </Table.Td>
+                                </Table.Tr>
+                                <Table.Tr v-else-if="listAchiev.total===0" class="intro-x">
                                     <Table.Td colspan="7" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]" >
                                         <div class="flex flex-col items-center justify-end col-span-12">
                                             <div class="mt-2 text-xs text-center">Data Not Found</div>
@@ -652,8 +660,15 @@
                                     </Table.Tr>
                                 </Table.Thead>
                                 <Table.Tbody>
-                            
-                                    <Table.Tr v-if="state.listData.total==0" class="intro-x">
+                                    <Table.Tr v-if="loading" class="intro-x">
+                                        <Table.Td colspan="8" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                                            <div class="flex flex-col items-center justify-end col-span-12">
+                                                <LoadingIcon icon="audio" class="w-8 h-8" />
+                                                <div class="mt-2 text-xs text-center">Processing Data</div>
+                                            </div>
+                                        </Table.Td>
+                                    </Table.Tr>
+                                    <Table.Tr v-else-if="state.listData.total==0" class="intro-x">
                                         <Table.Td colspan="7" class="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]" >
                                             <div class="flex flex-col items-center justify-end col-span-12">
                                                 <div class="mt-2 text-xs text-center">Data Not Found</div>
@@ -1192,6 +1207,11 @@
     import { useDebounceFn } from '@vueuse/core'
     import dayjs from 'dayjs'
     const basicModalPreview = ref(true);
+    const setBasicModalPreview = (value) => {
+        warningModalPreview.value = value;
+        loadingsycn.value = false
+        basicModalPreview.value = false
+    };
     const warningModalPreview = ref(false);
     const setWarningModalPreview = (value) => {
         warningModalPreview.value = value;
@@ -1321,7 +1341,7 @@
 
 
     const tampilData = async (page=1) => {
-        loadingsycn.value = true
+        loading.value = true
         basicModalPreview.value = true
         pesan.value="Please Wait, Proccesing Get Data"
     
@@ -1367,7 +1387,7 @@
                 const studioArray = datastudio.map(item => item.studio);
                 seriesDataStudio.value = studioArray
 
-                loadingsycn.value = false
+                loading.value = false
                 basicModalPreview.value = false
             }).catch(error => {
                 if(error.response.data.status_code==403){
@@ -1421,7 +1441,7 @@
                     seriesDataStudio.value = studioArray
                 }
     
-                loadingsycn.value = false
+                loading.value = false
                 basicModalPreview.value = false
             }).catch(error => {
                 console.log(error);
@@ -1469,7 +1489,7 @@
 
                 const studioArray = datastudio.map(item => item.studio);
                 seriesDataStudio.value = studioArray
-                loadingsycn.value = false
+                loading.value = false
                 basicModalPreview.value = false
             }).catch(error => {
                 if(error.response.data.status_code==403){
@@ -1931,9 +1951,11 @@
             const dateRange = tanggal.value.split(' - ');
             startDate.value = dateRange[0];
             endDate.value = dateRange[1];
-            await tampilachiev()
-            await tampilData()
-            await tampilDepartement()
+            await Promise.all([
+                tampilachiev(),
+                tampilData(),
+                tampilDepartement()
+            ]);
 
             if(user.group_studio==null){
                 state.listDepartementGroup = state.listDepartement.map(dept => dept.deptname)
